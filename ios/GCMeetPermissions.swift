@@ -1,19 +1,42 @@
 import Foundation
+import GCoreVideoCallsSDK
 
 @objc(GCMeetPermissions)
 class GCMeetPermissions: NSObject {
     @objc
     func authorizeForVideo(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
-        DeviceManager.authorizeForVideo { isGranted in
-            resolve(isGranted)
-        }
+        switch AVCaptureDevice.authorizationStatus(for: .video) {
+        case .notDetermined:
+            AVCaptureDevice.requestAccess(for: .video) { granted in
+                resolve(granted)
+            }
+        case .restricted:
+            resolve(false)
+        case .denied:
+            resolve(false)
+        case .authorized:
+            resolve(true)
+        @unknown default:
+            resolve(false)
+        }        
     }
     
     @objc
     func authorizeForAudio(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
-        DeviceManager.authorizeForAudio { isGranted in
-            resolve(isGranted)
-        }
+        switch AVCaptureDevice.authorizationStatus(for: .audio) {
+        case .notDetermined:
+            AVCaptureDevice.requestAccess(for: .audio) { granted in
+                resolve(granted)
+            }
+        case .restricted:
+            resolve(false)
+        case .denied:
+            resolve(false)
+        case .authorized:
+            resolve(true)
+        @unknown default:
+            resolve(false)
+        }        
     }
     
     @objc
@@ -24,8 +47,8 @@ class GCMeetPermissions: NSObject {
     @objc
     func constantsToExport() -> [AnyHashable : Any]! {
         return [
-            "isGrantedForAudio": DeviceManager.isGrantedForAudio(),
-            "isGrantedForVideo": DeviceManager.isGrantedForVideo(),
+            "isGrantedForAudio": AVCaptureDevice.authorizationStatus(for: .audio) == .authorized,
+            "isGrantedForVideo": AVCaptureDevice.authorizationStatus(for: .video) == .authorized
         ]
     }
 

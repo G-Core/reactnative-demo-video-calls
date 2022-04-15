@@ -222,7 +222,7 @@ extension GCMeetService: RoomListener {
     func roomClient(roomClient: GCoreRoomClient, produceLocalVideoTrack videoTrack: RTCVideoTrack) {
         print("RoomListener: produceLocalVideoTrack:", videoTrack)
         DispatchQueue.main.async {
-            videoTrack.add(ViewsEnum.local)        
+            videoTrack.add(GCViewsEnum.local)
         }
     }
     
@@ -247,8 +247,8 @@ extension GCMeetService: RoomListener {
             print("RoomListener: handledRemoteVideoTrack:", videoObject, roomClient)
             DispatchQueue.main.async {
                 // self?.delegate?.handledRemoteVideo(videoObject)
-                videoObject.rtcVideoTrack.remove(ViewsEnum.remote)
-                videoObject.rtcVideoTrack.add(ViewsEnum.remote)
+                videoObject.rtcVideoTrack.remove(GCViewsEnum.remote)
+                videoObject.rtcVideoTrack.add(GCViewsEnum.remote)
             }
             
             isConnectedOppoennt = true

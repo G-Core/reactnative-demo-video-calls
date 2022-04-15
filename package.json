@@ -28,7 +28,7 @@
     "prepare": "bob build",
     "release": "release-it",
     "example": "yarn --cwd MyExample",
-    "pods": "cd example && pod-install --quiet",
+    "pods": "cd MyExample && pod-install --quiet",
     "bootstrap": "yarn example && yarn && yarn pods"
   },
   "keywords": [

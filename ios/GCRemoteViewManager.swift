@@ -4,7 +4,7 @@ import Foundation
 class GCRemoteViewManager: RCTViewManager {
 
   override func view() -> UIView! {
-    return ViewsEnum.remote
+    return GCViewsEnum.remote
   }
 
   @objc override static func requiresMainQueueSetup() -> Bool {

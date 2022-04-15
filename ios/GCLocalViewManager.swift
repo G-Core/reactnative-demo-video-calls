@@ -4,7 +4,7 @@ import Foundation
 class GCLocalViewManager: RCTViewManager {
 
   override func view() -> UIView! {
-    return ViewsEnum.local
+    return GCViewsEnum.local
   }
 
   @objc override static func requiresMainQueueSetup() -> Bool {
