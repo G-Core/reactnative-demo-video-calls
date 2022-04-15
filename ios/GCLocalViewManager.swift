@@ -1,10 +1,10 @@
 import Foundation
 
-@objc(GCRemoteViewManager)
-class GCRemoteViewManager: RCTViewManager {
+@objc(GCLocalViewManager)
+class GCLocalViewManager: RCTViewManager {
 
   override func view() -> UIView! {
-    return ViewsEnum.remote
+    return ViewsEnum.local
   }
 
   @objc override static func requiresMainQueueSetup() -> Bool {

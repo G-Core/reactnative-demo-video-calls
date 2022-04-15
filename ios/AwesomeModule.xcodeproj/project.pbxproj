@@ -7,10 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-
-		5E555C0D2413F4C50049A1A2 /* AwesomeModule.m in Sources */ = {isa = PBXBuildFile; fileRef = B3E7B5891CC2AC0600A0062D /* AwesomeModule.m */; };
-		F4FF95D7245B92E800C19C63 /*  AwesomeModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4FF95D6245B92E800C19C63 /*  AwesomeModule.swift */; };
-
+		5500F9903CD43D501BBD6292 /* Pods_AwesomeModule.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2052B4F9E65A7476ACBB188 /* Pods_AwesomeModule.framework */; };
+		F4FF95D7245B92E800C19C63 /* AwesomeModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4FF95D6245B92E800C19C63 /* AwesomeModule.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -27,11 +25,13 @@
 
 /* Begin PBXFileReference section */
 		134814201AA4EA6300B7C361 /* libAwesomeModule.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libAwesomeModule.a; sourceTree = BUILT_PRODUCTS_DIR; };
-
+		63954A0F9F9BB98E157CF93D /* Pods-AwesomeModule.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AwesomeModule.debug.xcconfig"; path = "Target Support Files/Pods-AwesomeModule/Pods-AwesomeModule.debug.xcconfig"; sourceTree = "<group>"; };
+		6CD5A3DC951555DE12439DB4 /* Pods-AwesomeModule.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AwesomeModule.release.xcconfig"; path = "Target Support Files/Pods-AwesomeModule/Pods-AwesomeModule.release.xcconfig"; sourceTree = "<group>"; };
+		A99621EE28057554001FFE8C /* AwesomeModuleViewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AwesomeModuleViewManager.swift; sourceTree = "<group>"; };
 		B3E7B5891CC2AC0600A0062D /* AwesomeModule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AwesomeModule.m; sourceTree = "<group>"; };
+		E2052B4F9E65A7476ACBB188 /* Pods_AwesomeModule.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AwesomeModule.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F4FF95D5245B92E700C19C63 /* AwesomeModule-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AwesomeModule-Bridging-Header.h"; sourceTree = "<group>"; };
 		F4FF95D6245B92E800C19C63 /* AwesomeModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AwesomeModule.swift; sourceTree = "<group>"; };
-
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -39,6 +39,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5500F9903CD43D501BBD6292 /* Pods_AwesomeModule.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -53,16 +54,35 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		2A1D73ACC99F7E16777C9E6A /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				E2052B4F9E65A7476ACBB188 /* Pods_AwesomeModule.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		58B511D21A9E6C8500147676 = {
 			isa = PBXGroup;
 			children = (
-
+				A99621EE28057554001FFE8C /* AwesomeModuleViewManager.swift */,
 				F4FF95D6245B92E800C19C63 /* AwesomeModule.swift */,
 				B3E7B5891CC2AC0600A0062D /* AwesomeModule.m */,
 				F4FF95D5245B92E700C19C63 /* AwesomeModule-Bridging-Header.h */,
-
 				134814211AA4EA7D00B7C361 /* Products */,
+				C11503C52A27237C0E09FBFA /* Pods */,
+				2A1D73ACC99F7E16777C9E6A /* Frameworks */,
 			);
+			sourceTree = "<group>";
+		};
+		C11503C52A27237C0E09FBFA /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				63954A0F9F9BB98E157CF93D /* Pods-AwesomeModule.debug.xcconfig */,
+				6CD5A3DC951555DE12439DB4 /* Pods-AwesomeModule.release.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -72,6 +92,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 58B511EF1A9E6C8500147676 /* Build configuration list for PBXNativeTarget "AwesomeModule" */;
 			buildPhases = (
+				2E9E58DD7FD2B94F3E1C246F /* [CP] Check Pods Manifest.lock */,
 				58B511D71A9E6C8500147676 /* Sources */,
 				58B511D81A9E6C8500147676 /* Frameworks */,
 				58B511D91A9E6C8500147676 /* CopyFiles */,
@@ -117,15 +138,37 @@
 		};
 /* End PBXProject section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		2E9E58DD7FD2B94F3E1C246F /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-AwesomeModule-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		58B511D71A9E6C8500147676 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-
 				F4FF95D7245B92E800C19C63 /* AwesomeModule.swift in Sources */,
-				B3E7B58A1CC2AC0600A0062D /* AwesomeModule.m in Sources */,
-
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -227,6 +270,7 @@
 		};
 		58B511F01A9E6C8500147676 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 63954A0F9F9BB98E157CF93D /* Pods-AwesomeModule.debug.xcconfig */;
 			buildSettings = {
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -238,16 +282,15 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = AwesomeModule;
 				SKIP_INSTALL = YES;
-
 				SWIFT_OBJC_BRIDGING_HEADER = "AwesomeModule-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
-
 			};
 			name = Debug;
 		};
 		58B511F11A9E6C8500147676 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 6CD5A3DC951555DE12439DB4 /* Pods-AwesomeModule.release.xcconfig */;
 			buildSettings = {
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -259,10 +302,8 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = AwesomeModule;
 				SKIP_INSTALL = YES;
-
 				SWIFT_OBJC_BRIDGING_HEADER = "AwesomeModule-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
-
 			};
 			name = Release;
 		};

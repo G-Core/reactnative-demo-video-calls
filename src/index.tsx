@@ -18,6 +18,7 @@ type AwesomeModuleProps = {
 
 const ComponentName = 'AwesomeModuleView';
 
+
 export const AwesomeModuleView =
   UIManager.getViewManagerConfig(ComponentName) != null
     ? requireNativeComponent<AwesomeModuleProps>(ComponentName)
