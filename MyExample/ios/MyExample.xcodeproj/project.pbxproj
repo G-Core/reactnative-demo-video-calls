@@ -14,8 +14,8 @@
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		7699B88040F8A987B510C191 /* libPods-MyExample-MyExampleTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-MyExample-MyExampleTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
-		A9D4368C28097B110007EB9E /* GCoreVideoCallsSDK.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = A93E75262806CB0900BD8F25 /* GCoreVideoCallsSDK.xcframework */; };
-		A9D4368D28097B110007EB9E /* GCoreVideoCallsSDK.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A93E75262806CB0900BD8F25 /* GCoreVideoCallsSDK.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		A9D4368F280998D50007EB9E /* GCoreVideoCallsSDK.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9D4368E280998D50007EB9E /* GCoreVideoCallsSDK.xcframework */; };
+		A9D43690280998D50007EB9E /* GCoreVideoCallsSDK.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A9D4368E280998D50007EB9E /* GCoreVideoCallsSDK.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -29,13 +29,13 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		A9D43686280979430007EB9E /* Embed Frameworks */ = {
+		A9D43691280998D50007EB9E /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				A9D4368D28097B110007EB9E /* GCoreVideoCallsSDK.xcframework in Embed Frameworks */,
+				A9D43690280998D50007EB9E /* GCoreVideoCallsSDK.xcframework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -59,7 +59,7 @@
 		5DCACB8F33CDC322A6C60F78 /* libPods-MyExample.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MyExample.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = MyExample/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-MyExample-MyExampleTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MyExample-MyExampleTests.release.xcconfig"; path = "Target Support Files/Pods-MyExample-MyExampleTests/Pods-MyExample-MyExampleTests.release.xcconfig"; sourceTree = "<group>"; };
-		A93E75262806CB0900BD8F25 /* GCoreVideoCallsSDK.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = GCoreVideoCallsSDK.xcframework; path = "../../../gcorevideocallsdemo-ios/Dependencies/GCoreVideoCallsSDK.xcframework"; sourceTree = "<group>"; };
+		A9D4368E280998D50007EB9E /* GCoreVideoCallsSDK.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = GCoreVideoCallsSDK.xcframework; path = ../../ios/Dependencies/GCoreVideoCallsSDK.xcframework; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -77,7 +77,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0C80B921A6F3F58F76C31292 /* libPods-MyExample.a in Frameworks */,
-				A9D4368C28097B110007EB9E /* GCoreVideoCallsSDK.xcframework in Frameworks */,
+				A9D4368F280998D50007EB9E /* GCoreVideoCallsSDK.xcframework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -117,7 +117,7 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				A93E75262806CB0900BD8F25 /* GCoreVideoCallsSDK.xcframework */,
+				A9D4368E280998D50007EB9E /* GCoreVideoCallsSDK.xcframework */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				5DCACB8F33CDC322A6C60F78 /* libPods-MyExample.a */,
 				19F6CBCC0A4E27FBF8BF4A61 /* libPods-MyExample-MyExampleTests.a */,
@@ -203,7 +203,7 @@
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				00EEFC60759A1932668264C0 /* [CP] Embed Pods Frameworks */,
 				E235C05ADACE081382539298 /* [CP] Copy Pods Resources */,
-				A9D43686280979430007EB9E /* Embed Frameworks */,
+				A9D43691280998D50007EB9E /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -506,7 +506,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = N5KGET436K;
+				DEVELOPMENT_TEAM = HSMU27Z29D;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = MyExample/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -536,7 +536,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = N5KGET436K;
+				DEVELOPMENT_TEAM = HSMU27Z29D;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = MyExample/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (

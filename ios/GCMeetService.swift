@@ -8,6 +8,7 @@ struct ConnectionOptions {
     var roomId = ""
     var displayName = ""
     var clientHostName = ""
+    var blurSigma: Double = 10
 }
 
 
@@ -42,10 +43,12 @@ class GCMeetService: RCTEventEmitter {
             isAudioOn: roomOptions["isAudioOn"] as! Bool,
             roomId: roomOptions["roomId"] as! String,
             displayName: roomOptions["displayName"] as! String,
-            clientHostName: roomOptions["clientHostName"] as! String
+            clientHostName: roomOptions["clientHostName"] as! String,
+            blurSigma: roomOptions["blurSigma"] as! Double
         )
         
         client = GCoreRoomClient(roomOptions: options, requestParameters: parameters, roomListener: self)
+        client?.setBufferDelegate(self)
         try? client?.open()
         client?.audioSessionActivate()
     }
@@ -110,6 +113,13 @@ class GCMeetService: RCTEventEmitter {
     override static func requiresMainQueueSetup() -> Bool {
         return true
     }    
+}
+
+extension GCMeetService: MediaCapturerBufferDelegate {
+  func mediaCapturerDidBuffer(_ pixelBuffer: CVPixelBuffer) {
+      let ciimage = CIImage(cvPixelBuffer: pixelBuffer).applyingGaussianBlur(sigma: self.joinOptions.blurSigma)
+    CIContext().render(ciimage, to: pixelBuffer)
+  }
 }
 
 

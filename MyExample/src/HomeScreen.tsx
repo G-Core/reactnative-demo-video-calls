@@ -92,6 +92,7 @@ export const HomeScreen = ({ navigation }: NativeStackScreenProps<RootStackParam
             isVideoOn,
             clientHostName,
             isModerator: false,
+            blurSigma: 15,
           })}>
             <Text style={styles.joinText}>Присоединиться</Text>
         </Pressable>

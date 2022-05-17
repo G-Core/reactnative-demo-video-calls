@@ -7,5 +7,6 @@ export type RootStackParamList = {
         isVideoOn: boolean,
         isModerator: boolean,
         clientHostName: string
+        blurSigma: number;
     };    
   };
