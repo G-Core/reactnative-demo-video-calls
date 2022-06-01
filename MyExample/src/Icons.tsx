@@ -1,25 +1,25 @@
-import React from "react";
-import { Image } from 'react-native'; 
-import Svg, { Path, G, SvgProps, Rect } from "react-native-svg"
+import React from 'react';
+import {Image} from 'react-native';
+import Svg, {Path, G as SvgG, SvgProps, Rect} from 'react-native-svg';
 
-export const  MicrophoneIcon = (props: SvgProps) => {
+const G = (props: any) => <SvgG {...props} />;
+
+export const MicrophoneIcon = (props: SvgProps) => {
   return (
     <Svg width={24} height={24} {...props}>
-    <G
-      stroke="#FFF"
-      strokeWidth={1.5}
-      fill="none"
-      fillRule="evenodd"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <Path d="M11.976 14.632h0a3.158 3.158 0 0 1-3.158-3.158V5.158A3.158 3.158 0 0 1 11.976 2h0a3.158 3.158 0 0 1 3.158 3.158v6.316a3.158 3.158 0 0 1-3.158 3.158Z" />
-      <Path d="M18.292 9.368v2.106a6.315 6.315 0 0 1-6.316 6.315h0a6.315 6.315 0 0 1-6.316-6.315V9.368M11.976 17.789v3.158M7.576 20.947h8.8" />
-    </G>
-  </Svg>
+      <G
+        stroke="#FFF"
+        strokeWidth={1.5}
+        fill="none"
+        fillRule="evenodd"
+        strokeLinecap="round"
+        strokeLinejoin="round">
+        <Path d="M11.976 14.632h0a3.158 3.158 0 0 1-3.158-3.158V5.158A3.158 3.158 0 0 1 11.976 2h0a3.158 3.158 0 0 1 3.158 3.158v6.316a3.158 3.158 0 0 1-3.158 3.158Z" />
+        <Path d="M18.292 9.368v2.106a6.315 6.315 0 0 1-6.316 6.315h0a6.315 6.315 0 0 1-6.316-6.315V9.368M11.976 17.789v3.158M7.576 20.947h8.8" />
+      </G>
+    </Svg>
   );
-}
-
+};
 
 export const CameraIcon = (props: SvgProps) => {
   return (
@@ -29,27 +29,25 @@ export const CameraIcon = (props: SvgProps) => {
       </G>
     </Svg>
   );
-}
-
+};
 
 export const DropIcon = (props: SvgProps) => {
   return (
-    <Svg width={46.011} height={17.022} style={{transform: [{scale: 0.5}]}} {...props}>
+    <Svg
+      width={46.011}
+      height={17.022}
+      style={{transform: [{scale: 0.5}]}}
+      {...props}>
       <Path
         fill="#fff"
         d="M22.959 0C15.471 0 5.58.973.99 5.563-.69 7.086.252 13.606.365 14.344A2.889 2.889 0 0 0 3.334 17c.637-.105 8.09-1.7 9.031-1.906 1.223-.242 1.82-1.746 2.031-2.375.266-.8.914-4.105 1.156-5.375A16.764 16.764 0 0 1 22.959 6a16.347 16.347 0 0 1 7.5 1.438c.234 1.219.852 4.344 1.125 5.219a2.9 2.9 0 0 0 2.031 2.406c.766.191 8.34 1.832 9.094 1.938a1.69 1.69 0 0 0 .281 0 2.914 2.914 0 0 0 2.656-2.656c.113-.738 1.055-7.254-.625-8.781l-.062-.064C40.99 1.859 33.58 0 22.959 0z"
       />
     </Svg>
   );
-}
+};
 
 export const LogoIcon = (props: SvgProps) => (
-  <Svg
-    width={149}
-    height={55}
-    fill="none"    
-    {...props}
-  >
+  <Svg width={149} height={55} fill="none" {...props}>
     <Rect width={55} height={55} rx={9} fill="#8565C6" />
     <Path
       d="m37.941 44-.093-17.22-8.354 14.017h-4.085L17.1 27.244V44H8.606V11.509h7.566L27.59 30.26l11.14-18.752h7.566L46.39 44h-8.448Z"
@@ -60,6 +58,8 @@ export const LogoIcon = (props: SvgProps) => (
       fill="#8565C6"
     />
   </Svg>
-)
+);
 
-export const SwitchCameraIcon = () => (<Image source={require('./assets/switch_camera.png')}/>);
+export const SwitchCameraIcon = () => (
+  <Image source={require('./assets/switch_camera.png')} />
+);
