@@ -1,4 +1,5 @@
 buildscript {
+  apply from: 'versions.gradle'
   // Buildscript is evaluated before everything else so we can't use getExtOrDefault
   def kotlin_version = rootProject.ext.has('kotlinVersion') ? rootProject.ext.get('kotlinVersion') : project.properties['AwesomeModule_kotlinVersion']
 
@@ -9,7 +10,7 @@ buildscript {
   }
 
   dependencies {
-    classpath 'com.android.tools.build:gradle:3.2.1'
+    classpath 'com.android.tools.build:gradle:7.2.1'
     // noinspection DifferentKotlinGradleVersion
     classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
   }
@@ -17,6 +18,7 @@ buildscript {
 
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
 
 def getExtOrDefault(name) {
   return rootProject.ext.has(name) ? rootProject.ext.get(name) : project.properties['AwesomeModule_' + name]
@@ -33,9 +35,9 @@ android {
     targetSdkVersion getExtOrIntegerDefault('targetSdkVersion')
     versionCode 1
     versionName "1.0"
-    
+
   }
-  
+
   buildTypes {
     release {
       minifyEnabled false
@@ -114,7 +116,7 @@ repositories {
   }
 
   if (!found) {
-    throw new GradleException(
+    throw new FileNotFoundException(
             "${project.name}: unable to locate React Native android sources. " +
                     "Ensure you have you installed React Native as a dependency in your project and try again."
     )
@@ -127,4 +129,6 @@ dependencies {
   // noinspection GradleDynamicVersion
   api 'com.facebook.react:react-native:+'
   implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+
+  api fileTree(dir: "GCoreVideoCallsSDK", include: ["*.jar", "*.aar"])
 }
