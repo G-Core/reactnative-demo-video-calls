@@ -1,8 +1,8 @@
 import React from 'react';
-import {NavigationContainer} from '@react-navigation/native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {RoomScreen} from './RoomScreen';
-import {HomeScreen} from './HomeScreen';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { RoomScreen } from './RoomScreen';
+import { HomeScreen } from './HomeScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -23,7 +23,7 @@ function App() {
         />
         <Stack.Screen
           name="Room"
-          options={({route}: any) => ({
+          options={({ route }: any) => ({
             title: `Комната: ${route.params.roomId}`,
             headerStyle: {
               backgroundColor: '#131121',

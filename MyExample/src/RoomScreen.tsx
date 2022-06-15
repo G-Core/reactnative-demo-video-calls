@@ -1,21 +1,27 @@
-import type {NativeStackScreenProps} from '@react-navigation/native-stack';
-import React, {useState, useEffect, PropsWithChildren} from 'react';
+import type { NativeStackScreenProps } from '@react-navigation/native-stack';
+import React, { useEffect, useState } from 'react';
 
 import {
-  requireNativeComponent,
+  Dimensions,
+  NativeModules,
+  PermissionsAndroid,
+  Platform,
+  Pressable,
   StyleSheet,
   View,
-  ViewStyle,
-  NativeModules,
-  Pressable,
-  Dimensions,
-  StyleProp,
 } from 'react-native';
 
-import {withAnchorPoint} from 'react-native-anchor-point';
+import { withAnchorPoint } from 'react-native-anchor-point';
+import GCLocalView from './GCLocalView';
+import GCRemoteView from './GCRemoteView';
 
-import {CameraIcon, MicrophoneIcon, DropIcon, SwitchCameraIcon} from './Icons';
-import type {RootStackParamList} from './types';
+import {
+  CameraIcon,
+  DropIcon,
+  MicrophoneIcon,
+  SwitchCameraIcon,
+} from './Icons';
+import type { RootStackParamList } from './types';
 
 const screen = Dimensions.get('screen');
 const aspectRatio = 4 / 3;
@@ -24,17 +30,10 @@ const width = height * aspectRatio; // * screen.scale;
 
 const getTransform = () => {
   let transform = {
-    transform: [{translateX: (screen.width - width) / 2}, {translateY: 0}],
+    transform: [{ translateX: (screen.width - width) / 2 }, { translateY: 0 }],
   };
-  return withAnchorPoint(transform, {x: 0, y: 0}, {width, height});
+  return withAnchorPoint(transform, { x: 0, y: 0 }, { width, height });
 };
-
-interface ViewProps extends PropsWithChildren<any> {
-  style: StyleProp<ViewStyle>;
-}
-
-export const GCRemoteView = requireNativeComponent<ViewProps>('GCRemoteView');
-export const GCLocalView = requireNativeComponent<ViewProps>('GCLocalView');
 
 export const RoomScreen = ({
   route,
@@ -55,8 +54,21 @@ export const RoomScreen = ({
     navigation.goBack();
   };
 
+  const getCameraPermission = async () => {
+    if (Platform.OS === 'ios') {
+      return await NativeModules.GCMeetPermissions.authorizeForVideo();
+    } else {
+      return (
+        (await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.CAMERA,
+        )) === PermissionsAndroid.RESULTS.GRANTED
+      );
+    }
+  };
+
   const toggleVideo = async () => {
-    const result = await NativeModules.GCMeetPermissions.authorizeForVideo();
+    const result = await getCameraPermission();
+    console.log(`video: ${result}`);
     if (result) {
       const newValue = !videoOn;
       if (newValue) {
@@ -68,8 +80,20 @@ export const RoomScreen = ({
     }
   };
 
+  const getMicPermission = async () => {
+    if (Platform.OS === 'ios') {
+      return await NativeModules.GCMeetPermissions.authorizeForAudio();
+    } else {
+      return (
+        (await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
+        )) === PermissionsAndroid.RESULTS.GRANTED
+      );
+    }
+  };
+
   const toggleAudio = async () => {
-    const result = await NativeModules.GCMeetPermissions.authorizeForAudio();
+    const result = await getMicPermission();
     if (result) {
       const newValue = !audioOn;
       if (newValue) {
@@ -146,7 +170,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
   },
   mirror: {
-    transform: [{scaleX: -1}],
+    transform: [{ scaleX: -1 }],
   },
   preview: {
     height: 160,

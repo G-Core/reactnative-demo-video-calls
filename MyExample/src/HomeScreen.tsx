@@ -1,7 +1,9 @@
-import type {NativeStackScreenProps} from '@react-navigation/native-stack';
-import React, {useState, useEffect} from 'react';
+import type { NativeStackScreenProps } from '@react-navigation/native-stack';
+import React, { useEffect, useState } from 'react';
 import {
   NativeModules,
+  PermissionsAndroid,
+  Platform,
   Pressable,
   StyleSheet,
   Switch,
@@ -9,20 +11,111 @@ import {
   TextInput,
   View,
 } from 'react-native';
-import {LogoIcon} from './Icons';
-import type {RootStackParamList} from './types';
+import { LogoIcon } from './Icons';
+import type { RootStackParamList } from './types';
 
 export const HomeScreen = ({
   navigation,
 }: NativeStackScreenProps<RootStackParamList, 'Home'>) => {
-  const constant = NativeModules.GCMeetPermissions.getConstants();
   const [clientHostName, onChangeClientHostName] = useState(
     'https://meet.gcorelabs.com',
   );
   const [roomId, onChangeText] = useState('serv1');
-  const [displayName, onChangeDisplayName] = useState('From iPhone');
-  const [isAudioOn, onChangeAudio] = useState(constant.isGrantedForAudio);
-  const [isVideoOn, onChangeVideo] = useState(constant.isGrantedForVideo);
+  const [displayName, onChangeDisplayName] = useState('From React Native');
+  const [isAudioOn, onChangeAudio] = useState(false);
+  const [isVideoOn, onChangeVideo] = useState(false);
+
+  useEffect(() => {
+    if (Platform.OS === 'ios') {
+      const { isGrantedForAudio, isGrantedForVideo } =
+        NativeModules.GCMeetPermissions.getConstants();
+
+      onChangeAudio(isGrantedForAudio);
+      onChangeVideo(isGrantedForVideo);
+    } else {
+      initAudioVideoAndroidState();
+    }
+  }, []);
+
+  const initAudioVideoAndroidState = async () => {
+    const isGrantedForAudio = await PermissionsAndroid.check(
+      PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
+    );
+    const isGrantedForVideo = await PermissionsAndroid.check(
+      PermissionsAndroid.PERMISSIONS.CAMERA,
+    );
+
+    onChangeAudio(isGrantedForAudio);
+    onChangeVideo(isGrantedForVideo);
+  };
+
+  const toggleVideo = async (isOn: boolean) => {
+    let isGrantedForVideo = false;
+
+    if (Platform.OS === 'ios') {
+      isGrantedForVideo =
+        NativeModules.GCMeetPermissions.getConstants().isGrantedForVideo;
+    } else {
+      isGrantedForVideo = await PermissionsAndroid.check(
+        PermissionsAndroid.PERMISSIONS.CAMERA,
+      );
+    }
+
+    if (isOn && !isGrantedForVideo) {
+      const result = await getCameraPermission();
+      if (!result) {
+        return;
+      }
+    }
+
+    onChangeVideo(isOn);
+  };
+
+  const toggleAudio = async (isOn: boolean) => {
+    let isGrantedForAudio = false;
+
+    if (Platform.OS === 'ios') {
+      isGrantedForAudio =
+        NativeModules.GCMeetPermissions.getConstants().isGrantedForAudio;
+    } else {
+      isGrantedForAudio = await PermissionsAndroid.check(
+        PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
+      );
+    }
+
+    if (isOn && !isGrantedForAudio) {
+      const result = await getMicPermission();
+      if (!result) {
+        return;
+      }
+    }
+
+    onChangeAudio(isOn);
+  };
+
+  const getCameraPermission = async () => {
+    if (Platform.OS === 'ios') {
+      return await NativeModules.GCMeetPermissions.authorizeForVideo();
+    } else {
+      return (
+        (await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.CAMERA,
+        )) === 'granted'
+      );
+    }
+  };
+
+  const getMicPermission = async () => {
+    if (Platform.OS === 'ios') {
+      return await NativeModules.GCMeetPermissions.authorizeForAudio();
+    } else {
+      return (
+        (await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
+        )) === 'granted'
+      );
+    }
+  };
 
   useEffect(
     () =>
@@ -80,10 +173,10 @@ export const HomeScreen = ({
           <Text style={[styles.labelText, styles.labelPostion]}>Audio</Text>
           <Switch
             style={styles.switch}
-            trackColor={{false: '#767577', true: '#724df3'}}
+            trackColor={{ false: '#767577', true: '#724df3' }}
             thumbColor={'#f4f3f4'}
             ios_backgroundColor="#3e3e3e"
-            onValueChange={onChangeAudio}
+            onValueChange={toggleAudio}
             value={isAudioOn}
           />
         </View>
@@ -92,10 +185,10 @@ export const HomeScreen = ({
           <Text style={[styles.labelText, styles.labelPostion]}>Video</Text>
           <Switch
             style={styles.switch}
-            trackColor={{false: '#767577', true: '#724df3'}}
+            trackColor={{ false: '#767577', true: '#724df3' }}
             thumbColor={'#f4f3f4'}
             ios_backgroundColor="#3e3e3e"
-            onValueChange={onChangeVideo}
+            onValueChange={toggleVideo}
             value={isVideoOn}
           />
         </View>
@@ -110,7 +203,7 @@ export const HomeScreen = ({
             isAudioOn,
             isVideoOn,
             clientHostName,
-            isModerator: false,
+            isModerator: true,
             blurSigma: 15,
           })
         }>

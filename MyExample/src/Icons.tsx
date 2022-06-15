@@ -1,6 +1,6 @@
 import React from 'react';
-import {Image} from 'react-native';
-import Svg, {Path, G as SvgG, SvgProps, Rect} from 'react-native-svg';
+import { Image } from 'react-native';
+import Svg, { G as SvgG, Path, Rect, SvgProps } from 'react-native-svg';
 
 const G = (props: any) => <SvgG {...props} />;
 
@@ -36,7 +36,7 @@ export const DropIcon = (props: SvgProps) => {
     <Svg
       width={46.011}
       height={17.022}
-      style={{transform: [{scale: 0.5}]}}
+      style={{ transform: [{ scale: 0.5 }] }}
       {...props}>
       <Path
         fill="#fff"

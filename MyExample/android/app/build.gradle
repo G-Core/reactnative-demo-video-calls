@@ -79,6 +79,7 @@ import com.android.build.OutputFile
 
 project.ext.react = [
     enableHermes: false,  // clean and rebuild if changing
+    entryFile: "index.tsx"
 ]
 
 apply from: "../../node_modules/react-native/react.gradle"
@@ -129,6 +130,9 @@ def reactNativeArchitectures() {
 }
 
 android {
+  buildFeatures {
+    dataBinding true
+  }
     ndkVersion rootProject.ext.ndkVersion
 
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -256,9 +260,10 @@ dependencies {
     implementation "com.facebook.react:react-native:+"  // From node_modules
 
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
+    implementation project(path: ':reactnativeawesomemodule')
 
-    debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}") {
-        exclude group:'com.facebook.fbjni'
+  debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}") {
+          exclude group:'com.facebook.fbjni'
     }
 
     debugImplementation("com.facebook.flipper:flipper-network-plugin:${FLIPPER_VERSION}") {

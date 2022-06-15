@@ -1,107 +1,86 @@
 package com.reactnativeawesomemodule
-import com.facebook.react.bridge.NativeModule
-import com.facebook.react.bridge.ReactApplicationContext
-import com.facebook.react.bridge.ReactContext
-import com.facebook.react.bridge.ReactContextBaseJavaModule
-import com.facebook.react.bridge.ReactMethod
+
+import android.app.Application
 import android.util.Log
-import gcore.videocalls.meet.room.RoomOptions
+import com.facebook.react.bridge.*
+import com.facebook.react.bridge.UiThreadUtil.runOnUiThread
+import gcore.videocalls.meet.GCoreMeet
 
-class GCMeetService(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
-
-  private var client: GCoreRoomClient? = null
-  lateinit private var joinOptions: ConnectionOptions
-  private var isConnectedOppoennt = false
+class GCMeetService(val reactContext: ReactApplicationContext, private val application: Application) : ReactContextBaseJavaModule(reactContext) {
 
   override fun getName(): String {
     return "GCMeetService";
   }
 
-  @ReactMethod
-  fun openConnection(roomOptions: NSDictionary) {
-    GCoreRoomLogger.activateLogger()
-    GCoreRoomLogger.log = { message  ->
-      print(message)
+  init {
+    runOnUiThread {
+      GCoreMeet.instance.init(application, null, false)
     }
-    print(roomOptions)
-    val options = RoomOptions(cameraPosition: .front);
-
-    val parameters = MeetRoomParametrs(
-      roomId = roomOptions["roomId"] as String,
-      displayName = roomOptions["displayName"] as String,
-      clientHostName = roomOptions["clientHostName"] as? String,
-      isModerator = roomOptions["isModerator"] as Boolean
-    )
-    joinOptions = ConnectionOptions(
-      isVideoOn = roomOptions["isVideoOn"] as Boolean,
-      isAudioOn = roomOptions["isAudioOn"] as Boolean,
-      roomId = roomOptions["roomId"] as String,
-      displayName = roomOptions["displayName"] as String,
-      clientHostName = roomOptions["clientHostName"] as String,
-      blurSigma = roomOptions["blurSigma"] as Double
-    )
-    client = GCoreRoomClient(roomOptions = options, requestParameters = parameters, roomListener = this)
-    client?.setBufferDelegate(this)
-    try { client?.open() } catch (e: Throwable) { null }
-    client?.audioSessionActivate()
   }
 
+  @ReactMethod
+  fun openConnection(roomOptions: ReadableMap) {
+    runOnUiThread {
+      GCoreMeet.instance.roomManager.roomId = roomOptions.getString("roomId") ?: ""
+      GCoreMeet.instance.roomManager.displayName = roomOptions.getString("displayName") ?: ""
+      GCoreMeet.instance.roomManager.isModer = roomOptions.getBoolean("isModerator")
+
+      GCoreMeet.instance.startConnection(reactContext)
+
+      GCoreMeet.instance.roomManager.options.startWithCam = roomOptions.getBoolean("isVideoOn")
+      GCoreMeet.instance.roomManager.options.startWithMic = roomOptions.getBoolean("isAudioOn")
+
+      if(GCoreMeet.instance.roomManager.isClosed())
+        GCoreMeet.instance.roomManager.join()
+    }
+  }
 
   @ReactMethod
   fun closeConnection() {
-    client?.close()
+    runOnUiThread {
+      GCoreMeet.instance.roomManager.destroyRoom()
+    }
   }
 
   @ReactMethod
   fun enableVideo() {
-    toggleVideo(true)
+    GCoreMeet.instance.roomManager.enableCam()
   }
 
   @ReactMethod
   fun disableVideo() {
-    toggleVideo(false)
+    GCoreMeet.instance.roomManager.disableCam()
   }
 
   @ReactMethod
-  fun toggleVideo(isOn: Boolean) {
-    client?.toggleVideo(isOn = isOn)
-    print("toggleVideo: ", isOn)
+  fun toggleVideo() {
+    GCoreMeet.instance.roomManager.disableEnableCam()
   }
 
   @ReactMethod
   fun enableAudio() {
-    toggleAudio(true)
+    if(!GCoreMeet.instance.roomManager.isMicEnabled())
+      GCoreMeet.instance.roomManager.enableMic()
+
+    GCoreMeet.instance.roomManager.unmuteMic()
   }
 
   @ReactMethod
   fun disableAudio() {
-    toggleAudio(false)
+    GCoreMeet.instance.roomManager.muteMic()
   }
 
   @ReactMethod
-  fun toggleAudio(isOn: Boolean) {
-    client?.toggleAudio(isOn = isOn)
-    print("toggleAudio: ", isOn)
+  fun toggleAudio() {
+    if(!GCoreMeet.instance.roomManager.isMicEnabled())
+      GCoreMeet.instance.roomManager.enableMic()
+
+    GCoreMeet.instance.roomManager.muteUnMuteMic()
   }
 
   @ReactMethod
   fun toggleCamera() {
-    client?.toggleCameraPosition(completion = { error  ->
-      val error = error
-      if (error != null) {
-        debugPrint(error)
-      }
-    })
+    GCoreMeet.instance.roomManager.changeCam()
+    Log.d("qwe", "toggle cam")
   }
-
-  override fun supportedEvents() : List<String> =
-    listOf()
-
-  @ReactMethod
-  override fun constantsToExport() : Map<AnyHashable, Any> =
-    mapOf()
-
-  @ReactMethod
-  override fun requiresMainQueueSetup() : Boolean = true
-
 }

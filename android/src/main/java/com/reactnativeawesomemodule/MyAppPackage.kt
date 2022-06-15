@@ -1,19 +1,18 @@
 package com.reactnativeawesomemodule
 
-import android.view.View
+import android.app.Application
 import com.facebook.react.ReactPackage
 import com.facebook.react.bridge.NativeModule
 import com.facebook.react.bridge.ReactApplicationContext
-import com.facebook.react.uimanager.ReactShadowNode
-import com.facebook.react.uimanager.ViewManager
 
-class MyAppPackage : ReactPackage {
+class MyAppPackage(private val application: Application) : ReactPackage {
+
 
   override fun createViewManagers(
     reactContext: ReactApplicationContext
-  ): MutableList<ViewManager<View, ReactShadowNode<*>>> = mutableListOf()
+  ) = listOf(GCRemoteViewManager(reactContext), GCLocalViewManager(reactContext)).toMutableList()
 
   override fun createNativeModules(
     reactContext: ReactApplicationContext
-  ): MutableList<NativeModule> = listOf(GCMeetService(reactContext)).toMutableList()
+  ): MutableList<NativeModule> = listOf(GCMeetService(reactContext, application)).toMutableList()
 }
