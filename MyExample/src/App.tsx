@@ -28,7 +28,7 @@ function App() {
             headerStyle: {
               backgroundColor: '#131121',
             },
-            presentation: 'modal',
+            //presentation: 'modal',
             headerTintColor: '#fff',
           })}
           component={RoomScreen}

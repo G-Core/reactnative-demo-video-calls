@@ -1,28 +1,36 @@
 package com.reactnativeawesomemodule
 
+import android.util.Log
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.uimanager.SimpleViewManager
 import com.facebook.react.uimanager.ThemedReactContext
 import gcore.videocalls.meet.GCoreMeet
-import gcore.videocalls.meet.ui.view.peer.PeerVideoView
+import gcore.videocalls.meet.ui.view.remoteuser.RemoteUserVideoView
 
 class GCRemoteViewManager(var mCallerContext: ReactApplicationContext) :
-  SimpleViewManager<PeerVideoView>() {
+  SimpleViewManager<RemoteUserVideoView>() {
 
   override fun getName(): String {
     return "GCRemoteView"
   }
 
-  override fun createViewInstance(reactContext: ThemedReactContext): PeerVideoView {
-    val view = PeerVideoView(reactContext.baseContext)
-    GCoreMeet.instance.getPeers().observeForever { peers ->
-        peers?.allPeers?.let {
-          if(it.isNotEmpty()){
-            view.connect(it[0].id)
-          }
+  override fun onDropViewInstance(view: RemoteUserVideoView) {
+    view.disconnect()
+    view.release()
+    super.onDropViewInstance(view)
+  }
+
+  override fun createViewInstance(reactContext: ThemedReactContext): RemoteUserVideoView {
+    val view = RemoteUserVideoView(reactContext.baseContext)
+
+    GCoreMeet.instance.room.provider.remoteUsers.observeForever { remoteUsers ->
+      remoteUsers?.list?.let { users ->
+        if (users.isNotEmpty()) {
+          Log.d("ReactRemoteViewManager", "connect remote user: ${users[0].id}")
+          view.connect(users[0].id)
         }
+      }
     }
     return view
-
   }
 }

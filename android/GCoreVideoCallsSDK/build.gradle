@@ -1,2 +1,2 @@
 configurations.maybeCreate("default")
-artifacts.add("default", file('GCoreVideoCallsSDK-2.4.4-v10.aar'))
+artifacts.add("default", file('GCoreVideoCallsSDK-2.5.0.aar'))

@@ -1,6 +1,7 @@
 import Foundation
 import GCoreVideoCallsSDK
 import WebRTC
+import React
 
 struct ConnectionOptions {
     var isVideoOn = false
@@ -15,54 +16,73 @@ struct ConnectionOptions {
 @objc(GCMeetService)
 class GCMeetService: RCTEventEmitter {
 
-    private var client: GCoreRoomClient?
+    private var client = GCoreMeet.shared
     private var joinOptions: ConnectionOptions!
-    
-    private var isConnectedOppoennt = false
 
+    override func supportedEvents() -> [String]! {
+        return ["onConnectionChanged"]
+    }
+    
     @objc
-    func openConnection(_ roomOptions: NSDictionary) {
+    func openConnection(_ options: NSDictionary) {
         GCoreRoomLogger.activateLogger()
-        
-        GCoreRoomLogger.log = { message in
-            print(message);
+
+        client.cameraParams = GCoreCameraParams(cameraPosition: .front)
+
+        var userRole: GCoreUserRole
+        if let role = options["role"] {
+            switch role as! String {
+            case "common": userRole = .common
+            case "moderator": userRole = .moderator
+            default: userRole = .unknown
+          }
+        } else {
+            userRole = .unknown
         }
-        
-        print(roomOptions);
-        
-        let options = RoomOptions(cameraPosition: .front)
-        let parameters = MeetRoomParametrs(
-            roomId: roomOptions["roomId"] as! String,
-            displayName: roomOptions["displayName"] as! String,
-            clientHostName: roomOptions["clientHostName"] as? String,
-            isModerator: roomOptions["isModerator"] as! Bool
-        )
+
+        let localUserParams = GCoreLocalUserParams(
+            name: options["displayName"] as! String,
+            role: userRole)
+
+        let roomParams = GCoreRoomParams(
+            id: options["roomId"] as! String,
+            host: options["clientHostName"] as? String)
+
+        client.connectionParams = (localUserParams, roomParams)
 
         joinOptions = ConnectionOptions(
-            isVideoOn: roomOptions["isVideoOn"] as! Bool,
-            isAudioOn: roomOptions["isAudioOn"] as! Bool,
-            roomId: roomOptions["roomId"] as! String,
-            displayName: roomOptions["displayName"] as! String,
-            clientHostName: roomOptions["clientHostName"] as! String,
-            blurSigma: roomOptions["blurSigma"] as! Double
+            isVideoOn: options["isVideoOn"] as! Bool,
+            isAudioOn: options["isAudioOn"] as! Bool,
+            blurSigma: options["blurSigma"] as! Double
         )
-        
-        client = GCoreRoomClient(roomOptions: options, requestParameters: parameters, roomListener: self)
-        client?.setBufferDelegate(self)
-        try? client?.open()
-        client?.audioSessionActivate()
+
+        try? client.startConnection()
+        client.audioSessionActivate()
+        client.roomListener = self
+    }
+
+    @objc
+    func enableBlur() {
+        client.webrtcBufferDelegate = self
+        print("blur on")
+    }
+
+    @objc
+    func disableBlur() {
+        client.webrtcBufferDelegate = nil
+        print("blur off")
     }
 
     @objc
     func closeConnection() {
-        client?.close()
+        client.close()
     }
-    
+
     @objc
     func enableVideo() {
         toggleVideo(true)
     }
-    
+
     @objc
     func disableVideo() {
         toggleVideo(false)
@@ -70,15 +90,15 @@ class GCMeetService: RCTEventEmitter {
 
     @objc
     func toggleVideo(_ isOn: Bool) {
-        client?.toggleVideo(isOn: isOn)
+        client.localUser?.toggleCam(isOn: isOn)
         print("toggleVideo: ", isOn)
     }
-    
+
     @objc
     func enableAudio() {
         toggleAudio(true)
     }
-    
+
     @objc
     func disableAudio() {
         toggleAudio(false)
@@ -86,21 +106,17 @@ class GCMeetService: RCTEventEmitter {
 
     @objc
     func toggleAudio(_ isOn: Bool) {
-        client?.toggleAudio(isOn: isOn)
+        client.localUser?.toggleMic(isOn: isOn)
         print("toggleAudio: ", isOn)
     }
 
     @objc
-    func toggleCamera() {
-        client?.toggleCameraPosition(completion: { error in
+    func flipCamera() {
+        client.localUser?.flipCam(completion: { error in
             if let error = error {
                 debugPrint(error)
             }
         })
-    }
-
-    override func supportedEvents() -> [String]! {
-        return []
     }
 
     @objc
@@ -112,183 +128,142 @@ class GCMeetService: RCTEventEmitter {
     @objc
     override static func requiresMainQueueSetup() -> Bool {
         return true
-    }    
+    }
 }
 
 extension GCMeetService: MediaCapturerBufferDelegate {
   func mediaCapturerDidBuffer(_ pixelBuffer: CVPixelBuffer) {
       let ciimage = CIImage(cvPixelBuffer: pixelBuffer).applyingGaussianBlur(sigma: self.joinOptions.blurSigma)
-    CIContext().render(ciimage, to: pixelBuffer)
+      CIContext().render(ciimage, to: pixelBuffer)
+      print("blured with sigma: ", self.joinOptions.blurSigma)
   }
 }
 
 
-extension GCMeetService: RoomListener {
-    func roomClient(roomClient: GCoreRoomClient, joinPermissions: JoinPermissionsObject) {
-        
+extension GCMeetService: GCoreRoomListener {
+    func roomClient(_ client: GCoreRoomClient, waitingRoomIsActive: Bool) {
+
     }
-    
-    func roomClient(roomClient: GCoreRoomClient, toggleByModerator kind: String, status: Bool) {
-        
+
+    func roomClient(_ client: GCoreRoomClient, captureSession: AVCaptureSession, captureDevice: AVCaptureDevice) {
+
     }
-    
-    func roomClient(roomClient: GCoreRoomClient, acceptedPermissionFromModerator fromModerator: Bool, peer: PeerObject, requestType: String) {
-        
+
+    func roomClientHandle(error: GCoreRoomError) {
+
     }
-    
-    func roomClientWaitingForModeratorJoinAccept() {
-        
-    }
-    
-    func roomClientModeratorRejectedJoinRequest() {
-        
-    }
-    
-    func roomClient(roomClient: GCoreRoomClient, moderatorIsAskedToJoin: ModeratorIsAskedToJoin) {
-        
-    }
-    
-    func roomClient(roomClient: GCoreRoomClient, updateMeInfo: UpdateMeInfoObject) {
-        
-    }
-    
-    func roomClient(roomClient: GCoreRoomClient, requestToModerator: RequestToModerator) {
-        
-    }
-    
-    func roomClientRemovedByModerator() {
-        
-    }
-    
-    func roomClient(roomClient: GCoreRoomClient, captureSession: AVCaptureSession, captureDevice: AVCaptureDevice) {
-        
-    }
-    
-    func roomClientStartToConnectWithServices() {
-        //delegate?.startConnecting()
-        print("roomClientStartToConnectWithServices")
-    }
-    
-    func roomClientSuccessfullyConnectWithServices() {
-        // delegate?.finishConnecting()
-        print("roomClientSuccessfullyConnectWithServices:")
-    }
-    
-    func roomClientHandle(error: RoomError) {
-        print("RoomListener:", error.localizedDescription)
-    }
-    
-    func roomClientDidConnected() {
-        print("RoomListener: roomClientDidConnected")
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-            if self.joinOptions.isVideoOn {
-                self.toggleVideo(self.joinOptions.isVideoOn)
-                print("toggleVideo joined: ", self.joinOptions.isVideoOn)
-            }
-            
-            if self.joinOptions.isAudioOn {
-                self.toggleAudio(self.joinOptions.isAudioOn)
-                print("toggleAudio joined: ", self.joinOptions.isAudioOn)
-            }
-        }
-    }
-    
-    func roomClientReconnecting() {
-        print("RoomListener: roomClientReconnecting")
-    }
-    
-    func roomClientReconnectingFailed() {
-        print("RoomListener: roomClientReconnectingFailed")        
-//        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-//            try? self.client?.open()
-//        }
-    }
-    
-    func roomClientSocketDidDisconnected(roomClient: GCoreRoomClient) {
-        print("RoomListener: roomClientSocketDidDisconnected", roomClient)
-    }
-    
-    func roomClient(roomClient: GCoreRoomClient, joinWithPeersInRoom peers: [PeerObject]) {
-        print("RoomListener: joinWithPeersInRoom peers:", peers)
-        // delegate?.joinWithPeersInRoom(peers)
-    }
-    
-    func roomClient(roomClient: GCoreRoomClient, handlePeer: PeerObject) {
-        // delegate?.handledPeer(handlePeer)
-        print("RoomListener: handlePeer:", handlePeer.displayName ?? "name unknown")
-    }
-    
-    func roomClient(roomClient: GCoreRoomClient, disableProducerByModerator kind: String) {
-        // delegate?.peerClosed(peerClosed)
-        print("RoomListener: peerClosed:", kind)
-    }
-    
-    func roomClient(roomClient: GCoreRoomClient, peerClosed: String) {
-        // delegate?.peerClosed(peerClosed)
-        print("RoomListener: peerClosed:", peerClosed)
-    }
-    
-    func roomClient(roomClient: GCoreRoomClient, produceLocalVideoTrack videoTrack: RTCVideoTrack) {
-        print("RoomListener: produceLocalVideoTrack:", videoTrack)
-        DispatchQueue.main.async {
-            videoTrack.add(GCViewsEnum.local)
-        }
-    }
-    
-    func roomClient(roomClient: GCoreRoomClient, produceLocalAudioTrack audioTrack: RTCAudioTrack) {
-        print("RoomListener: produceLocalAudioTrack:", audioTrack)
-        // delegate?.produceLocalAudioTrack(audioTrack)
-    }
-    
-    func roomClient(roomClient: GCoreRoomClient, didCloseLocalVideoTrack videoTrack: RTCVideoTrack?) {
-        print("RoomListener: didCloseLocalVideoTrack:", videoTrack ?? "")
-    }
-    
-    func roomClient(roomClient: GCoreRoomClient, didCloseLocalAudioTrack audioTrack: RTCAudioTrack?) {
-        print("RoomListener: didCloseLocalAudioTrack:", audioTrack ?? "")
-    }
-    
-    // MARK: - Remote
-    
-    // Video
-    func roomClient(roomClient: GCoreRoomClient, handledRemoteVideo videoObject: VideoObject) {
-//        if !isConnectedOppoennt {
-            print("RoomListener: handledRemoteVideoTrack:", videoObject, roomClient)
-            DispatchQueue.main.async {
-                // self?.delegate?.handledRemoteVideo(videoObject)
-                videoObject.rtcVideoTrack.remove(GCViewsEnum.remote)
-                videoObject.rtcVideoTrack.add(GCViewsEnum.remote)
-            }
-            
-            isConnectedOppoennt = true
-//        }
-        
-    }
-    
-    func roomClient(roomClient: GCoreRoomClient, didCloseRemoteVideoByModerator byModerator: Bool, videoObject: VideoObject) {
-        print("RoomListener: didCloseRemoteVideoByModerator:", videoObject)
-        DispatchQueue.main.async {
-            // self?.delegate?.willCloseRemoteVideo(videoObject)
-        }
-    }
-    
-    // Audio
-    func roomClient(roomClient: GCoreRoomClient, produceRemoteAudio audioObject: AudioObject) {
-        DispatchQueue.main.async {
-            // self?.delegate?.audioDidChanged(audioObject)
+
+    func roomClientHandle(_ client: GCoreRoomClient, forAllRoles joinData: GCoreJoinData) {
+        switch joinData {
+
+        case .permissions(mediaStreams: let mediaStreams):
+            print("permissions: ", mediaStreams)
+        case .othersInRoom(remoteUsers: let remoteUsers):
+            print("othersInRoom: ", remoteUsers)
+        case .localUser(info: let info):
+            print("localUser: ", info)
+        default:
+            print("default")
         }
     }
 
-    func roomClient(roomClient: GCoreRoomClient, didCloseRemoteAudioByModerator byModerator: Bool, audioObject: AudioObject) {
-        DispatchQueue.main.async {
-            // self?.delegate?.audioDidChanged(audioObject)
+    func roomClientHandle(_ client: GCoreRoomClient, remoteUsersEvent: GCoreRemoteUsersEvent) {
+        switch remoteUsersEvent {
+
+        case .handleRemote(user: let user):
+            print("handleRemote: ", user)
+        case .closedRemote(userId: let userId):
+            print("closedRemote: ", userId)
+        case .activeSpeaker(remoteUserIds: let remoteUserIds):
+            print("activeSpeaker: ", remoteUserIds)
+        case .userSleep(id: let id, isSleeping: let isSleeping):
+            print("userSleep: ", id, isSleeping)
+        case .changeName(userId: let userId, new: let new, old: let old):
+            print("changeName: ", userId, old, new)
+        default:
+            print("default")
         }
     }
-    
-    func roomClient(roomClient: GCoreRoomClient, activeSpeakerPeers peers: [String]) {
-        DispatchQueue.main.async {
-            // self?.delegate?.activeSpeakerPeers(peers)
+
+    func roomClientHandle(_ client: GCoreRoomClient, mediaEvent: GCoreMediaEvent) {
+        switch mediaEvent {
+
+        case .produceLocalVideo(track: let track):
+            print("RoomListener: produceLocalVideoTrack:", track)
+            DispatchQueue.main.async {
+                track.add(GCViewsEnum.local)
+            }
+        case .produceLocalAudio(track: let track):
+            print("produceLocalAudio: ", track)
+        case .didCloseLocalVideo(track: let track):
+            print("didCloseLocalVideo: ", track ?? "nil")
+            DispatchQueue.main.async {
+                track?.remove(GCViewsEnum.local)
+            }
+        case .didCloseLocalAudio(track: let track):
+            print("didCloseLocalAudio: ", track ?? "nil")
+        case .handledRemoteVideo(videoObject: let videoObject):
+            print("RoomListener: handledRemoteVideoTrack:", videoObject)
+            DispatchQueue.main.async {
+                videoObject.rtcVideoTrack.add(GCViewsEnum.remote)
+            }
+        case .produceRemoteAudio(audioObject: let audioObject):
+            print("produceRemoteAudio: ", audioObject)
+        case .didCloseRemoteVideo(byModerator: let byModerator, videoObject: let videoObject):
+            print("didCloseRemoteVideo: ", byModerator, videoObject)
+            DispatchQueue.main.async {
+                videoObject.rtcVideoTrack.remove(GCViewsEnum.remote)
+            }
+        case .didCloseRemoteAudio(byModerator: let byModerator, audioObject: let audioObject):
+            print("didCloseRemoteAudio: ", byModerator, audioObject)
+        case .togglePermissionsByModerator(kind: let kind, status: let status):
+            print("togglePermissionsByModerator: ", kind, status)
+        case .acceptedPermission(kind: let kind):
+            print("acceptedPermission: ", kind)
+        case .disableProducerByModerator(media: let media):
+            print("disableProducerByModerator: ", media)
+        default:
+            print("default")
+        }
+    }
+
+    func roomClientHandle(_ client: GCoreRoomClient, connectionEvent: GCoreRoomConnectionEvent) {
+        
+        sendEvent(withName: "onConnectionChanged", body: ["connection": String(describing: connectionEvent)])
+        switch connectionEvent {
+
+        case .startToConnectWithServices:
+            print("startToConnectWithServices")
+        case .successfullyConnectWithServices:
+            print("successfullyConnectWithServices")
+        case .didConnected:
+            print("RoomListener: roomClientDidConnected")
+
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                if self.joinOptions.isVideoOn {
+                    self.toggleVideo(self.joinOptions.isVideoOn)
+                    print("toggleVideo joined: ", self.joinOptions.isVideoOn)
+                }
+
+                if self.joinOptions.isAudioOn {
+                    self.toggleAudio(self.joinOptions.isAudioOn)
+                    print("toggleAudio joined: ", self.joinOptions.isAudioOn)
+                }
+            }
+        case .reconnecting:
+            print("reconnecting")
+        case .reconnectingFailed:
+            print("reconnectingFailed")
+        case .socketDidDisconnected:
+            print("socketDidDisconnected")
+        case .waitingForModeratorJoinAccept:
+            print("waitingForModeratorJoinAccept")
+        case .moderatorRejectedLocalJoinRequest:
+            print("moderatorRejectedLocalJoinRequest")
+        case .removedByModerator:
+            print("removedByModerator")
+        default:
+            print("default")
         }
     }
 }

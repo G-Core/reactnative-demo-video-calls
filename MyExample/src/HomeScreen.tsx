@@ -2,8 +2,6 @@ import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React, { useEffect, useState } from 'react';
 import {
   NativeModules,
-  PermissionsAndroid,
-  Platform,
   Pressable,
   StyleSheet,
   Switch,
@@ -12,56 +10,41 @@ import {
   View,
 } from 'react-native';
 import { LogoIcon } from './Icons';
-import type { RootStackParamList } from './types';
+import type { ConnectOptions, RootStackParamList } from './types';
+import {
+  getCameraPermission,
+  getMicPermission,
+  isGrantedForAudio,
+  isGrantedForVideo,
+  prepareClientHostName,
+} from './helpers';
 
 export const HomeScreen = ({
   navigation,
 }: NativeStackScreenProps<RootStackParamList, 'Home'>) => {
-  const [clientHostName, onChangeClientHostName] = useState(
-    'https://meet.gcorelabs.com',
-  );
-  const [roomId, onChangeText] = useState('serv1');
+  const [clientHostName, onChangeClientHostName] =
+    useState('meet.gcorelabs.com');
+  const [roomId, onChangeText] = useState('serv0');
   const [displayName, onChangeDisplayName] = useState('From React Native');
   const [isAudioOn, onChangeAudio] = useState(false);
   const [isVideoOn, onChangeVideo] = useState(false);
 
   useEffect(() => {
-    if (Platform.OS === 'ios') {
-      const { isGrantedForAudio, isGrantedForVideo } =
-        NativeModules.GCMeetPermissions.getConstants();
-
-      onChangeAudio(isGrantedForAudio);
-      onChangeVideo(isGrantedForVideo);
-    } else {
-      initAudioVideoAndroidState();
-    }
+    initAudioVideoState();
   }, []);
 
-  const initAudioVideoAndroidState = async () => {
-    const isGrantedForAudio = await PermissionsAndroid.check(
-      PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
-    );
-    const isGrantedForVideo = await PermissionsAndroid.check(
-      PermissionsAndroid.PERMISSIONS.CAMERA,
-    );
+  const initAudioVideoState = async () => {
+    const isAudioGranted = await isGrantedForAudio();
+    //const isVideoGranted = await isGrantedForVideo();
 
-    onChangeAudio(isGrantedForAudio);
-    onChangeVideo(isGrantedForVideo);
+    //onChangeAudio(isVideoGranted);
+    onChangeVideo(isAudioGranted);
   };
 
   const toggleVideo = async (isOn: boolean) => {
-    let isGrantedForVideo = false;
+    let isGranted = await isGrantedForVideo();
 
-    if (Platform.OS === 'ios') {
-      isGrantedForVideo =
-        NativeModules.GCMeetPermissions.getConstants().isGrantedForVideo;
-    } else {
-      isGrantedForVideo = await PermissionsAndroid.check(
-        PermissionsAndroid.PERMISSIONS.CAMERA,
-      );
-    }
-
-    if (isOn && !isGrantedForVideo) {
+    if (isOn && !isGranted) {
       const result = await getCameraPermission();
       if (!result) {
         return;
@@ -72,18 +55,9 @@ export const HomeScreen = ({
   };
 
   const toggleAudio = async (isOn: boolean) => {
-    let isGrantedForAudio = false;
+    let isAudioGranted = await isGrantedForAudio();
 
-    if (Platform.OS === 'ios') {
-      isGrantedForAudio =
-        NativeModules.GCMeetPermissions.getConstants().isGrantedForAudio;
-    } else {
-      isGrantedForAudio = await PermissionsAndroid.check(
-        PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
-      );
-    }
-
-    if (isOn && !isGrantedForAudio) {
+    if (isOn && !isAudioGranted) {
       const result = await getMicPermission();
       if (!result) {
         return;
@@ -93,44 +67,30 @@ export const HomeScreen = ({
     onChangeAudio(isOn);
   };
 
-  const getCameraPermission = async () => {
-    if (Platform.OS === 'ios') {
-      return await NativeModules.GCMeetPermissions.authorizeForVideo();
-    } else {
-      return (
-        (await PermissionsAndroid.request(
-          PermissionsAndroid.PERMISSIONS.CAMERA,
-        )) === 'granted'
-      );
-    }
+  const connect = () => {
+    const options: ConnectOptions = {
+      roomId,
+      displayName,
+      isAudioOn,
+      isVideoOn,
+      clientHostName,
+      role: 'common',
+      blurSigma: 35,
+    };
+
+    NativeModules.GCMeetService.openConnection({
+      ...options,
+      clientHostName: prepareClientHostName(options.clientHostName),
+    });
+
+    navigation.navigate('Room', options);
   };
-
-  const getMicPermission = async () => {
-    if (Platform.OS === 'ios') {
-      return await NativeModules.GCMeetPermissions.authorizeForAudio();
-    } else {
-      return (
-        (await PermissionsAndroid.request(
-          PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
-        )) === 'granted'
-      );
-    }
-  };
-
-  useEffect(
-    () =>
-      navigation.addListener('focus', () => {
-        NativeModules.GCMeetService.closeConnection();
-      }),
-    [navigation],
-  );
-
   return (
     <View style={styles.container}>
       <LogoIcon style={styles.logo} />
 
       <View style={styles.formgroup}>
-        <Text style={[styles.label, styles.labelText, styles.labelPostion]}>
+        <Text style={[styles.label, styles.labelText, styles.labelPosition]}>
           Hostname
         </Text>
         <TextInput
@@ -143,7 +103,7 @@ export const HomeScreen = ({
       </View>
 
       <View style={styles.formgroup}>
-        <Text style={[styles.label, styles.labelText, styles.labelPostion]}>
+        <Text style={[styles.label, styles.labelText, styles.labelPosition]}>
           Room
         </Text>
         <TextInput
@@ -156,7 +116,7 @@ export const HomeScreen = ({
       </View>
 
       <View style={styles.formgroup}>
-        <Text style={[styles.label, styles.labelText, styles.labelPostion]}>
+        <Text style={[styles.label, styles.labelText, styles.labelPosition]}>
           Display name
         </Text>
         <TextInput
@@ -170,7 +130,7 @@ export const HomeScreen = ({
 
       <View style={styles.formrow}>
         <View style={styles.formgroup}>
-          <Text style={[styles.labelText, styles.labelPostion]}>Audio</Text>
+          <Text style={[styles.labelText, styles.labelPosition]}>Audio</Text>
           <Switch
             style={styles.switch}
             trackColor={{ false: '#767577', true: '#724df3' }}
@@ -182,7 +142,7 @@ export const HomeScreen = ({
         </View>
 
         <View style={styles.formgroup}>
-          <Text style={[styles.labelText, styles.labelPostion]}>Video</Text>
+          <Text style={[styles.labelText, styles.labelPosition]}>Video</Text>
           <Switch
             style={styles.switch}
             trackColor={{ false: '#767577', true: '#724df3' }}
@@ -194,19 +154,7 @@ export const HomeScreen = ({
         </View>
       </View>
 
-      <Pressable
-        style={styles.join}
-        onPress={() =>
-          navigation.navigate('Room', {
-            roomId,
-            displayName,
-            isAudioOn,
-            isVideoOn,
-            clientHostName,
-            isModerator: true,
-            blurSigma: 15,
-          })
-        }>
+      <Pressable style={styles.join} onPress={() => connect()}>
         <Text style={styles.joinText}>Присоединиться</Text>
       </Pressable>
     </View>
@@ -263,7 +211,7 @@ const styles = StyleSheet.create({
   label: {
     width: 100,
   },
-  labelPostion: {
+  labelPosition: {
     marginRight: 15,
   },
   labelText: {

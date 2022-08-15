@@ -4,7 +4,8 @@ import Foundation
 class GCRemoteViewManager: RCTViewManager {
 
   override func view() -> UIView! {
-    return GCViewsEnum.remote
+      GCViewsEnum.remote.contentMode = .scaleAspectFit
+      return GCViewsEnum.remote
   }
 
   @objc override static func requiresMainQueueSetup() -> Bool {

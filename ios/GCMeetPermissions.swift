@@ -1,5 +1,4 @@
 import Foundation
-import GCoreVideoCallsSDK
 
 @objc(GCMeetPermissions)
 class GCMeetPermissions: NSObject {

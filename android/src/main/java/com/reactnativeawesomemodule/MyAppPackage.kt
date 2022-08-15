@@ -10,7 +10,10 @@ class MyAppPackage(private val application: Application) : ReactPackage {
 
   override fun createViewManagers(
     reactContext: ReactApplicationContext
-  ) = listOf(GCRemoteViewManager(reactContext), GCLocalViewManager(reactContext)).toMutableList()
+  ) = listOf(
+    GCRemoteViewManager(reactContext),
+    GCLocalViewManager(reactContext),
+  ).toMutableList()
 
   override fun createNativeModules(
     reactContext: ReactApplicationContext

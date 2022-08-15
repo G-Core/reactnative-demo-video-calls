@@ -8,3 +8,10 @@ pluginManagement {
   }
 }
 rootProject.name = "GCAndroidNativeModule"
+
+
+include ':mediasoup-android-client'
+project(':mediasoup-android-client').projectDir = new File(rootProject.projectDir, '/mediasoup-android-client')
+
+include ':GCoreVideoCallsSDK'
+project(':GCoreVideoCallsSDK').projectDir = new File(rootProject.projectDir, '/GCoreVideoCallsSDK')

@@ -3,8 +3,8 @@ import React, { useEffect, useState } from 'react';
 
 import {
   Dimensions,
+  EmitterSubscription,
   NativeModules,
-  PermissionsAndroid,
   Platform,
   Pressable,
   StyleSheet,
@@ -12,16 +12,21 @@ import {
 } from 'react-native';
 
 import { withAnchorPoint } from 'react-native-anchor-point';
-import GCLocalView from './GCLocalView';
 import GCRemoteView from './GCRemoteView';
+import GCLocalView from './GCLocalView';
 
 import {
+  BlurIcon,
   CameraIcon,
   DropIcon,
   MicrophoneIcon,
   SwitchCameraIcon,
 } from './Icons';
 import type { RootStackParamList } from './types';
+import {
+  getCameraPermission,
+  getMicPermission,
+} from './helpers';
 
 const screen = Dimensions.get('screen');
 const aspectRatio = 4 / 3;
@@ -39,30 +44,47 @@ export const RoomScreen = ({
   route,
   navigation,
 }: NativeStackScreenProps<RootStackParamList, 'Room'>) => {
-  const [videoOn, onChangeVideo] = useState(route.params.isVideoOn);
-  const [audioOn, onChangeAudio] = useState(route.params.isAudioOn);
+  const [isVideoOn, onChangeVideo] = useState(route.params.isVideoOn);
+  const [isAudioOn, onChangeAudio] = useState(route.params.isAudioOn);
+  const [isBlurOn, onChangeBlur] = useState(false);
+  const [isConnected, onChangeConnected] = useState(true);
 
-  useEffect(
-    () =>
-      navigation.addListener('focus', () => {
-        NativeModules.GCMeetService.openConnection(route.params);
-      }),
-    [navigation, route.params],
-  );
+  let connectionListener: EmitterSubscription;
+
+  // useEffect(
+  //   () =>
+  //     navigation.addListener('focus', () => {
+  //
+  //     }),
+  //   [navigation, route.params],
+  // );
+
+  useEffect(() => {
+    return () => {
+      if (connectionListener) {
+        connectionListener.remove();
+      }
+      disconnect();
+    };
+  }, []);
 
   const disconnect = () => {
-    navigation.goBack();
+    NativeModules.GCMeetService.closeConnection();
+    navigation.navigate('Home');
   };
 
-  const getCameraPermission = async () => {
+  const toggleBlur = () => {
     if (Platform.OS === 'ios') {
-      return await NativeModules.GCMeetPermissions.authorizeForVideo();
-    } else {
-      return (
-        (await PermissionsAndroid.request(
-          PermissionsAndroid.PERMISSIONS.CAMERA,
-        )) === PermissionsAndroid.RESULTS.GRANTED
-      );
+      const newValue = !isBlurOn;
+      if (newValue) {
+        NativeModules.GCMeetService.enableBlur();
+      } else {
+        NativeModules.GCMeetService.disableBlur();
+      }
+      onChangeBlur(newValue);
+    }
+    else{
+      onChangeConnected(!isConnected)
     }
   };
 
@@ -70,7 +92,7 @@ export const RoomScreen = ({
     const result = await getCameraPermission();
     console.log(`video: ${result}`);
     if (result) {
-      const newValue = !videoOn;
+      const newValue = !isVideoOn;
       if (newValue) {
         NativeModules.GCMeetService.enableVideo();
       } else {
@@ -80,22 +102,10 @@ export const RoomScreen = ({
     }
   };
 
-  const getMicPermission = async () => {
-    if (Platform.OS === 'ios') {
-      return await NativeModules.GCMeetPermissions.authorizeForAudio();
-    } else {
-      return (
-        (await PermissionsAndroid.request(
-          PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
-        )) === PermissionsAndroid.RESULTS.GRANTED
-      );
-    }
-  };
-
   const toggleAudio = async () => {
     const result = await getMicPermission();
     if (result) {
-      const newValue = !audioOn;
+      const newValue = !isAudioOn;
       if (newValue) {
         NativeModules.GCMeetService.enableAudio();
       } else {
@@ -106,15 +116,15 @@ export const RoomScreen = ({
   };
 
   const switchCamera = () => {
-    NativeModules.GCMeetService.toggleCamera();
+    NativeModules.GCMeetService.flipCamera();
   };
 
   return (
     <View style={styles.root}>
       <View style={styles.container}>
         <View>
-          {videoOn && (
-            <View>
+          {isVideoOn && isConnected && (
+            <View style={[styles.previewWrapper]}>
               <GCLocalView style={[styles.mirror, styles.preview]} />
             </View>
           )}
@@ -123,13 +133,20 @@ export const RoomScreen = ({
             <Pressable style={[styles.btn]} onPress={switchCamera}>
               <SwitchCameraIcon />
             </Pressable>
+            {Platform.OS !== 'ios' && (
+              <Pressable
+                style={[styles.btn, isBlurOn ? styles.on : styles.off]}
+                onPress={toggleBlur}>
+                <BlurIcon />
+              </Pressable>
+            )}
             <Pressable
-              style={[styles.btn, videoOn ? styles.on : styles.off]}
+              style={[styles.btn, isVideoOn ? styles.on : styles.off]}
               onPress={toggleVideo}>
               <CameraIcon />
             </Pressable>
             <Pressable
-              style={[styles.btn, audioOn ? styles.on : styles.off]}
+              style={[styles.btn, isAudioOn ? styles.on : styles.off]}
               onPress={toggleAudio}>
               <MicrophoneIcon />
             </Pressable>
@@ -168,9 +185,13 @@ const styles = StyleSheet.create({
     elevation: 0,
     borderRadius: 0,
     position: 'absolute',
+    backgroundColor: 'silver'
   },
   mirror: {
     transform: [{ scaleX: -1 }],
+  },
+  previewWrapper: {
+    borderRadius: 8,
   },
   preview: {
     height: 160,
@@ -178,6 +199,7 @@ const styles = StyleSheet.create({
     marginVertical: 20,
     overflow: 'hidden',
     aspectRatio: 3 / 4,
+    backgroundColor: 'red'
   },
   toolbar: {
     flexDirection: 'row',
