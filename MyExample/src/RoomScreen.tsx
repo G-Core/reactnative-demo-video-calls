@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 
 import {
   Dimensions,
-  EmitterSubscription,
   NativeModules,
   Platform,
   Pressable,
@@ -23,10 +22,7 @@ import {
   SwitchCameraIcon,
 } from './Icons';
 import type { RootStackParamList } from './types';
-import {
-  getCameraPermission,
-  getMicPermission,
-} from './helpers';
+import { getCameraPermission, getMicPermission } from './helpers';
 
 const screen = Dimensions.get('screen');
 const aspectRatio = 4 / 3;
@@ -47,23 +43,9 @@ export const RoomScreen = ({
   const [isVideoOn, onChangeVideo] = useState(route.params.isVideoOn);
   const [isAudioOn, onChangeAudio] = useState(route.params.isAudioOn);
   const [isBlurOn, onChangeBlur] = useState(false);
-  const [isConnected, onChangeConnected] = useState(true);
-
-  let connectionListener: EmitterSubscription;
-
-  // useEffect(
-  //   () =>
-  //     navigation.addListener('focus', () => {
-  //
-  //     }),
-  //   [navigation, route.params],
-  // );
 
   useEffect(() => {
     return () => {
-      if (connectionListener) {
-        connectionListener.remove();
-      }
       disconnect();
     };
   }, []);
@@ -82,9 +64,6 @@ export const RoomScreen = ({
         NativeModules.GCMeetService.disableBlur();
       }
       onChangeBlur(newValue);
-    }
-    else{
-      onChangeConnected(!isConnected)
     }
   };
 
@@ -123,7 +102,7 @@ export const RoomScreen = ({
     <View style={styles.root}>
       <View style={styles.container}>
         <View>
-          {isVideoOn && isConnected && (
+          {isVideoOn && (
             <View style={[styles.previewWrapper]}>
               <GCLocalView style={[styles.mirror, styles.preview]} />
             </View>
@@ -133,7 +112,7 @@ export const RoomScreen = ({
             <Pressable style={[styles.btn]} onPress={switchCamera}>
               <SwitchCameraIcon />
             </Pressable>
-            {Platform.OS !== 'ios' && (
+            {Platform.OS === 'ios' && (
               <Pressable
                 style={[styles.btn, isBlurOn ? styles.on : styles.off]}
                 onPress={toggleBlur}>
@@ -164,7 +143,7 @@ export const RoomScreen = ({
 const styles = StyleSheet.create({
   root: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: 'gray',
     overflow: 'hidden',
   },
   container: {
@@ -185,7 +164,7 @@ const styles = StyleSheet.create({
     elevation: 0,
     borderRadius: 0,
     position: 'absolute',
-    backgroundColor: 'silver'
+    backgroundColor: 'silver',
   },
   mirror: {
     transform: [{ scaleX: -1 }],
@@ -199,7 +178,6 @@ const styles = StyleSheet.create({
     marginVertical: 20,
     overflow: 'hidden',
     aspectRatio: 3 / 4,
-    backgroundColor: 'red'
   },
   toolbar: {
     flexDirection: 'row',

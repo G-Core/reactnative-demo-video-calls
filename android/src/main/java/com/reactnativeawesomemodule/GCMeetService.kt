@@ -23,9 +23,6 @@ class GCMeetService(
   private val application: Application
 ) : ReactContextBaseJavaModule(reactContext) {
 
-  private var enableCamOnConnect = false
-  private var enableMicOnConnect = false
-
   override fun getName(): String {
     return "GCMeetService"
   }
@@ -54,12 +51,9 @@ class GCMeetService(
       val roomParams = RoomParams(
         roomId = options.getString("roomId") ?: "",
         hostName = options.getString("clientHostName") ?: "",
-//        startWithCam = options.getBoolean("isVideoOn"),
-//        startWithMic = options.getBoolean("isAudioOn")
+        startWithCam = options.getBoolean("isVideoOn"),
+        startWithMic = options.getBoolean("isAudioOn")
       )
-
-      enableCamOnConnect = options.getBoolean("isVideoOn")
-      enableMicOnConnect = options.getBoolean("isAudioOn")
 
       GCoreMeet.instance.setConnectionParams(userInfo, roomParams)
       GCoreMeet.instance.connect(reactContext)
@@ -68,22 +62,6 @@ class GCMeetService(
         reactContext.getSystemService(Context.AUDIO_SERVICE) as AudioManager
 
       audioManager.isSpeakerphoneOn = true
-
-      if (enableCamOnConnect || enableMicOnConnect) {
-        GCoreMeet.instance.room.provider.roomInfo.observeForever {
-          if (it.connectionState == ConnectionState.CONNECTED) {
-            if (enableCamOnConnect) {
-              enableVideo()
-              enableCamOnConnect = false
-              Log.d("Local", "enableVideo")
-            }
-            if (enableMicOnConnect) {
-              enableAudio()
-              enableMicOnConnect = false
-            }
-          }
-        }
-      }
 
     }
   }

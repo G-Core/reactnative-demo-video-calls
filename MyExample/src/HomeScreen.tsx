@@ -35,10 +35,10 @@ export const HomeScreen = ({
 
   const initAudioVideoState = async () => {
     const isAudioGranted = await isGrantedForAudio();
-    //const isVideoGranted = await isGrantedForVideo();
+    const isVideoGranted = await isGrantedForVideo();
 
-    //onChangeAudio(isVideoGranted);
-    onChangeVideo(isAudioGranted);
+    onChangeAudio(isAudioGranted);
+    onChangeVideo(isVideoGranted);
   };
 
   const toggleVideo = async (isOn: boolean) => {
