@@ -13,9 +13,6 @@ include ':app'
 
 includeBuild('../node_modules/react-native-gradle-plugin')
 
-include ':mediasoup-android-client'
-project(':mediasoup-android-client').projectDir = new File(rootProject.projectDir, '../../android/mediasoup-android-client')
-
 include ':GCoreVideoCallsSDK'
 project(':GCoreVideoCallsSDK').projectDir = new File(rootProject.projectDir, '../../android/GCoreVideoCallsSDK')
 

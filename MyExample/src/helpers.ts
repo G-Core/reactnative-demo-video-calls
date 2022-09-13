@@ -1,5 +1,13 @@
 import { NativeModules, PermissionsAndroid, Platform } from 'react-native';
 
+export const getAndroidBluetoothConnectPermission = async () => {
+    return (
+      (await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.BLUETOOTH_CONNECT,
+      )) === PermissionsAndroid.RESULTS.GRANTED
+    );
+};
+
 export const getCameraPermission = async () => {
   if (Platform.OS === 'ios') {
     return await NativeModules.GCMeetPermissions.authorizeForVideo();

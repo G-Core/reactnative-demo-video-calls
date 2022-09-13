@@ -1,28 +1,15 @@
-import type { NativeStackScreenProps } from '@react-navigation/native-stack';
-import React, { useEffect, useState } from 'react';
+import type {NativeStackScreenProps} from '@react-navigation/native-stack';
+import React, {useEffect, useState} from 'react';
 
-import {
-  Dimensions,
-  NativeModules,
-  Platform,
-  Pressable,
-  StyleSheet,
-  View,
-} from 'react-native';
+import {Dimensions, NativeModules, Platform, Pressable, StyleSheet, View,} from 'react-native';
 
-import { withAnchorPoint } from 'react-native-anchor-point';
+import {withAnchorPoint} from 'react-native-anchor-point';
 import GCRemoteView from './GCRemoteView';
 import GCLocalView from './GCLocalView';
 
-import {
-  BlurIcon,
-  CameraIcon,
-  DropIcon,
-  MicrophoneIcon,
-  SwitchCameraIcon,
-} from './Icons';
-import type { RootStackParamList } from './types';
-import { getCameraPermission, getMicPermission } from './helpers';
+import {BlurIcon, CameraIcon, DropIcon, MicrophoneIcon, SwitchCameraIcon,} from './Icons';
+import type {RootStackParamList} from './types';
+import {getCameraPermission, getMicPermission} from './helpers';
 
 const screen = Dimensions.get('screen');
 const aspectRatio = 4 / 3;
@@ -31,15 +18,12 @@ const width = height * aspectRatio; // * screen.scale;
 
 const getTransform = () => {
   let transform = {
-    transform: [{ translateX: (screen.width - width) / 2 }, { translateY: 0 }],
+    transform: [{translateX: (screen.width - width) / 2}, {translateY: 0}],
   };
-  return withAnchorPoint(transform, { x: 0, y: 0 }, { width, height });
+  return withAnchorPoint(transform, {x: 0, y: 0}, {width, height});
 };
 
-export const RoomScreen = ({
-  route,
-  navigation,
-}: NativeStackScreenProps<RootStackParamList, 'Room'>) => {
+export const RoomScreen = ({ route, navigation }: NativeStackScreenProps<RootStackParamList, 'Room'>) => {
   const [isVideoOn, onChangeVideo] = useState(route.params.isVideoOn);
   const [isAudioOn, onChangeAudio] = useState(route.params.isAudioOn);
   const [isBlurOn, onChangeBlur] = useState(false);
@@ -69,7 +53,6 @@ export const RoomScreen = ({
 
   const toggleVideo = async () => {
     const result = await getCameraPermission();
-    console.log(`video: ${result}`);
     if (result) {
       const newValue = !isVideoOn;
       if (newValue) {
@@ -102,40 +85,38 @@ export const RoomScreen = ({
     <View style={styles.root}>
       <View style={styles.container}>
         <View>
-          {isVideoOn && (
-            <View style={[styles.previewWrapper]}>
-              <GCLocalView style={[styles.mirror, styles.preview]} />
-            </View>
-          )}
+          <View style={[styles.previewWrapper]}>
+            <GCLocalView style={[styles.mirror, styles.preview]}/>
+          </View>
 
           <View style={styles.toolbar}>
             <Pressable style={[styles.btn]} onPress={switchCamera}>
-              <SwitchCameraIcon />
+              <SwitchCameraIcon/>
             </Pressable>
             {Platform.OS === 'ios' && (
               <Pressable
                 style={[styles.btn, isBlurOn ? styles.on : styles.off]}
                 onPress={toggleBlur}>
-                <BlurIcon />
+                <BlurIcon/>
               </Pressable>
             )}
             <Pressable
               style={[styles.btn, isVideoOn ? styles.on : styles.off]}
               onPress={toggleVideo}>
-              <CameraIcon />
+              <CameraIcon/>
             </Pressable>
             <Pressable
               style={[styles.btn, isAudioOn ? styles.on : styles.off]}
               onPress={toggleAudio}>
-              <MicrophoneIcon />
+              <MicrophoneIcon/>
             </Pressable>
             <Pressable style={[styles.btn, styles.drop]} onPress={disconnect}>
-              <DropIcon />
+              <DropIcon/>
             </Pressable>
           </View>
         </View>
       </View>
-      <GCRemoteView style={[styles.remote, getTransform()]} />
+      <GCRemoteView style={[styles.remote, getTransform()]}/>
     </View>
   );
 };
@@ -167,7 +148,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'silver',
   },
   mirror: {
-    transform: [{ scaleX: -1 }],
+    transform: [{scaleX: -1}],
   },
   previewWrapper: {
     borderRadius: 8,

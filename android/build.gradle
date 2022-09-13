@@ -1,9 +1,7 @@
 allprojects {
   repositories {
-    jcenter()
-    mavenCentral()
+    gradlePluginPortal()
     google()
-    maven {url ' https://jitpack.io ' }
   }
 }
 
@@ -13,15 +11,13 @@ buildscript {
   def kotlin_version = rootProject.ext.has('kotlinVersion') ? rootProject.ext.get('kotlinVersion') : project.properties['AwesomeModule_kotlinVersion']
 
   repositories {
+    gradlePluginPortal()
     google()
-    mavenCentral()
-    jcenter()
-    maven { url 'https://jitpack.io' }
   }
   dependencies {
-    classpath 'com.android.tools.build:gradle:7.0.4'
+    classpath 'com.android.tools.build:gradle:7.2.2'
     // noinspection DifferentKotlinGradleVersion
-    classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.7.0"
+    classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.10"
   }
 }
 
@@ -141,10 +137,10 @@ def kotlin_version = getExtOrDefault('kotlinVersion')
 dependencies {
   // noinspection GradleDynamicVersion
   api 'com.facebook.react:react-native:+'
+  implementation 'com.twilio:audioswitch:1.1.5'
   implementation "org.jetbrains.kotlin:kotlin-stdlib:1.5.30"
-  implementation 'androidx.core:core-ktx:1.6.0'
+  implementation "androidx.core:core-ktx:$CORE_KTX_VERSION"
 
-  implementation project(":mediasoup-android-client")
   implementation project(":GCoreVideoCallsSDK")
 
   implementation "androidx.lifecycle:lifecycle-extensions:$LIFECYCLE_VERSION"

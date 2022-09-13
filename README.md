@@ -17,19 +17,17 @@ yarn install
 ## How to use SDK with react-native
 ### Android
 #### Import SDK to Android project
-Place SDK and mediasoup in your project.<br/>
+Place SDK in your project.<br/>
 Change settings.gradle file (located in android directory of your main project) with following code for include projects:
 ```gradle
-include ':mediasoup-android-client'
-project(':mediasoup-android-client').projectDir = new File(rootProject.projectDir, 'path/to/mediasoup/folder')
-​
 include ':GCoreVideoCallsSDK'
 project(':GCoreVideoCallsSDK').projectDir = new File(rootProject.projectDir, '/path/to/SDK/folder')
 ```
 Add dependency to your build.gradle (located in android directory located in root of your project)
 ```gradle
-  implementation project(":mediasoup-android-client")
-  implementation project(":GCoreVideoCallsSDK")
+implementation 'com.twilio:audioswitch:1.1.5'
+implementation "io.github.crow-misia.libmediasoup-android:libmediasoup-android:0.10.0"
+implementation project(":GCoreVideoCallsSDK")
 ```
 #### Implementation native module
 Create native module by [official react-native docs](https://reactnative.dev/docs/native-modules-android) <br/>
@@ -41,7 +39,7 @@ Init SDK function from our example application:
 ```kotlin
   init {
     runOnUiThread {
-      GCoreMeet.instance.init(application, null, false)
+      GCoreMeet.instance.init(application)
     }
   }
 ```
@@ -86,38 +84,26 @@ Join user to room function from our example application:
         "moderator" -> UserRole.MODERATOR
         else -> UserRole.UNKNOWN
       }
+
       val userInfo = LocalUserInfo(
-        displayName = options.getString("displayName") ?: "",
-        role = userRole
+        displayName = options.getString("displayName") ?: "User${Utils.getRandomString(3)}",
+        role = userRole,
+        userId = options.getString("userId") ?: Utils.getRandomString(DEFAULT_LENGTH_RANDOM_STRING)
       )
 
       val roomParams = RoomParams(
         roomId = options.getString("roomId") ?: "",
         hostName = options.getString("clientHostName") ?: "",
-      ).apply {
-        startWithCam = options.getBoolean("isVideoOn")
+        startWithCam = options.getBoolean("isVideoOn"),
         startWithMic = options.getBoolean("isAudioOn")
-      }
+      )
 
       GCoreMeet.instance.setConnectionParams(userInfo, roomParams)
       GCoreMeet.instance.connect(reactContext)
-
-      GCoreMeet.instance.room.provider.roomInfo.observeForever { roomInfo ->
-        if (roomInfo.connectionState == ConnectionState.CONNECTED) {
-          if (roomParams.startWithCam)
-            this.enableVideo()
-        }
-      }
-
-
-      val audioManager: AudioManager =
-        reactContext.getSystemService(Context.AUDIO_SERVICE) as AudioManager
-      audioManager.isSpeakerphoneOn = true
-      audioManager.mode = AudioManager.MODE_IN_CALL
     }
   }
 ```
-Make sure that SDK functions `GCoreMeet.instance.init` and `GCoreMeet.instance.roomManager.join` running in UI Thread
+Make sure that SDK functions `GCoreMeet.instance.init` and `GCoreMeet.instance.connect` running in UI Thread
 <br/>
 
 You have to use view components from SDK in your react-native application
@@ -135,13 +121,11 @@ class GCLocalViewManager(var mCallerContext: ReactApplicationContext) :
   }
 
   override fun createViewInstance(reactContext: ThemedReactContext): LocalVideoTextureView {
-    val view = LocalVideoTextureView(reactContext.baseContext)
-    view.connect()
-    return view
+    return LocalVideoTextureView(reactContext.baseContext)
   }
 }
 ```
-And create `RemoteUserVideoView` by example:
+Use `RemoteUserVideoView` by example:
 ```kotlin
 class GCRemoteViewManager(var mCallerContext: ReactApplicationContext) :
   SimpleViewManager<RemoteUserVideoView>() {
@@ -150,16 +134,19 @@ class GCRemoteViewManager(var mCallerContext: ReactApplicationContext) :
     return "GCRemoteView"
   }
 
+  override fun onDropViewInstance(view: RemoteUserVideoView) {
+    view.release()
+    super.onDropViewInstance(view)
+  }
+
   override fun createViewInstance(reactContext: ThemedReactContext): RemoteUserVideoView {
     val view = RemoteUserVideoView(reactContext.baseContext)
 
-    GCoreMeet.instance.room.provider.remoteUsers.observeForever { remoteUsers ->
-      remoteUsers?.allRemoteUsers?.let { users ->
+    GCoreMeet.instance.roomState.remoteUsers.observeForever { remoteUsers ->
+      remoteUsers?.list?.let { users ->
         if (users.isNotEmpty()) {
+          LLog.d("ReactRemoteViewManager", "connect remote user: ${users[0].id}")
           view.connect(users[0].id)
-        }
-        else {
-          view.release()
         }
       }
     }
@@ -168,8 +155,23 @@ class GCRemoteViewManager(var mCallerContext: ReactApplicationContext) :
 }
 ```
 You have to call function `connect` for `RemoteUserVideoView` and pass `userId` into
-You can get `userId` from `GCoreMeet.instance.room.provider.remoteUsers` by example above
+<br>
+You can get `userId` from `GCoreMeet.instance.roomState.remoteUsers` by example above
 
+Add permissions in `AndroidManifest.xml`
+```xml
+    <manifestPermissions>
+      <!-- Needed to communicate with already-paired Bluetooth devices. (Legacy up to Android 11) -->
+      <uses-permission android:name="android.permission.BLUETOOTH" android:maxSdkVersion="30" />
+      <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" android:maxSdkVersion="30" />
+      <!-- Needed to communicate with already-paired Bluetooth devices. (Android 12 upwards)-->
+      <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+      <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+      <uses-permission android:name="android.permission.INTERNET" />
+      <uses-permission android:name="android.permission.CALL_PHONE" />
+      <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    </manifestPermissions>
+```
 
 
 ### IOS
