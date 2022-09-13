@@ -7,6 +7,9 @@ import com.facebook.react.bridge.ReactApplicationContext
 
 class MyAppPackage(private val application: Application) : ReactPackage {
 
+  override fun createNativeModules(
+    reactContext: ReactApplicationContext
+  ): MutableList<NativeModule> = listOf(GCMeetService(application, reactContext)).toMutableList()
 
   override fun createViewManagers(
     reactContext: ReactApplicationContext
@@ -15,7 +18,4 @@ class MyAppPackage(private val application: Application) : ReactPackage {
     GCLocalViewManager(reactContext),
   ).toMutableList()
 
-  override fun createNativeModules(
-    reactContext: ReactApplicationContext
-  ): MutableList<NativeModule> = listOf(GCMeetService(reactContext, application)).toMutableList()
 }

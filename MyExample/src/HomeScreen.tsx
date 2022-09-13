@@ -1,7 +1,7 @@
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React, { useEffect, useState } from 'react';
 import {
-  NativeModules,
+  NativeModules, Platform,
   Pressable,
   StyleSheet,
   Switch,
@@ -12,6 +12,7 @@ import {
 import { LogoIcon } from './Icons';
 import type { ConnectOptions, RootStackParamList } from './types';
 import {
+  getAndroidBluetoothConnectPermission,
   getCameraPermission,
   getMicPermission,
   isGrantedForAudio,
@@ -31,6 +32,10 @@ export const HomeScreen = ({
 
   useEffect(() => {
     initAudioVideoState();
+
+    if (Platform.OS === 'android' && Platform.Version >= 31) {
+      getAndroidBluetoothConnectPermission()
+    }
   }, []);
 
   const initAudioVideoState = async () => {

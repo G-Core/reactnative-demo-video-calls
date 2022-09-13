@@ -5,6 +5,7 @@ import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.uimanager.SimpleViewManager
 import com.facebook.react.uimanager.ThemedReactContext
 import gcore.videocalls.meet.GCoreMeet
+import gcore.videocalls.meet.logger.LLog
 import gcore.videocalls.meet.ui.view.remoteuser.RemoteUserVideoView
 
 class GCRemoteViewManager(var mCallerContext: ReactApplicationContext) :
@@ -15,7 +16,6 @@ class GCRemoteViewManager(var mCallerContext: ReactApplicationContext) :
   }
 
   override fun onDropViewInstance(view: RemoteUserVideoView) {
-    view.disconnect()
     view.release()
     super.onDropViewInstance(view)
   }
@@ -23,10 +23,10 @@ class GCRemoteViewManager(var mCallerContext: ReactApplicationContext) :
   override fun createViewInstance(reactContext: ThemedReactContext): RemoteUserVideoView {
     val view = RemoteUserVideoView(reactContext.baseContext)
 
-    GCoreMeet.instance.room.provider.remoteUsers.observeForever { remoteUsers ->
+    GCoreMeet.instance.roomState.remoteUsers.observeForever { remoteUsers ->
       remoteUsers?.list?.let { users ->
         if (users.isNotEmpty()) {
-          Log.d("ReactRemoteViewManager", "connect remote user: ${users[0].id}")
+          LLog.d("ReactRemoteViewManager", "connect remote user: ${users[0].id}")
           view.connect(users[0].id)
         }
       }
