@@ -9,7 +9,7 @@ class MyAppPackage(private val application: Application) : ReactPackage {
 
   override fun createNativeModules(
     reactContext: ReactApplicationContext
-  ): MutableList<NativeModule> = listOf(GCMeetService(application, reactContext)).toMutableList()
+  ): MutableList<NativeModule> = listOf(GCMeetService(reactContext, application)).toMutableList()
 
   override fun createViewManagers(
     reactContext: ReactApplicationContext

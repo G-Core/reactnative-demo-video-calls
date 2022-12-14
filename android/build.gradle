@@ -1,5 +1,24 @@
+def REACT_NATIVE_VERSION = new File(['node', '--print', "JSON.parse(require('fs').readFileSync(require.resolve('react-native/package.json'), 'utf-8')).version"].execute(null, rootDir).text.trim())
+
 allprojects {
+
+  configurations.all {
+    resolutionStrategy {
+      // Remove this override in 0.66, as a proper fix is included in react-native itself.
+      force "com.facebook.react:react-native:" + REACT_NATIVE_VERSION
+    }
+  }
   repositories {
+    exclusiveContent {
+      filter {
+        includeGroup "com.facebook.react"
+      }
+      forRepository {
+        maven {
+          url "$rootDir/../node_modules/react-native/android"
+        }
+      }
+    }
     gradlePluginPortal()
     google()
   }
@@ -13,6 +32,7 @@ buildscript {
   repositories {
     gradlePluginPortal()
     google()
+    mavenCentral()
   }
   dependencies {
     classpath 'com.android.tools.build:gradle:7.2.2'
@@ -36,11 +56,10 @@ def getExtOrIntegerDefault(name) {
 android {
   compileSdkVersion getExtOrIntegerDefault('compileSdkVersion')
   defaultConfig {
-    minSdkVersion 24
+    minSdkVersion 21
     targetSdkVersion getExtOrIntegerDefault('targetSdkVersion')
     versionCode 1
     versionName "1.0"
-
   }
 
   buildTypes {
@@ -73,8 +92,8 @@ repositories {
     defaultDir = rootProject.ext.get('reactNativeAndroidRoot')
   } else {
     defaultDir = new File(
-            projectDir,
-            '/../../../node_modules/react-native/android'
+      projectDir,
+      '/../../../node_modules/react-native/android'
     )
   }
 
@@ -94,13 +113,13 @@ repositories {
       parentDir = parentDir.parentFile
 
       def androidSourcesDir = new File(
-              parentDir,
-              'node_modules/react-native'
+        parentDir,
+        'node_modules/react-native'
       )
 
       def androidPrebuiltBinaryDir = new File(
-              parentDir,
-              'node_modules/react-native/android'
+        parentDir,
+        'node_modules/react-native/android'
       )
 
       if (androidPrebuiltBinaryDir.exists()) {
@@ -125,8 +144,8 @@ repositories {
 
   if (!found) {
     throw new FileNotFoundException(
-            "${project.name}: unable to locate React Native android sources. " +
-                    "Ensure you have you installed React Native as a dependency in your project and try again."
+      "${project.name}: unable to locate React Native android sources. " +
+        "Ensure you have you installed React Native as a dependency in your project and try again."
     )
   }
 }
@@ -136,12 +155,20 @@ def kotlin_version = getExtOrDefault('kotlinVersion')
 
 dependencies {
   // noinspection GradleDynamicVersion
-  api 'com.facebook.react:react-native:+'
+  implementation 'com.facebook.react:react-native:0.71.0-rc.0'
   implementation 'com.twilio:audioswitch:1.1.5'
   implementation "org.jetbrains.kotlin:kotlin-stdlib:1.5.30"
   implementation "androidx.core:core-ktx:$CORE_KTX_VERSION"
 
-  implementation project(":GCoreVideoCallsSDK")
+  implementation "io.github.crow-misia.libmediasoup-android:libmediasoup-android:0.11.0"
+  implementation "io.github.crow-misia.libyuv:libyuv-android:0.24.0"
+
+  implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
+
+  implementation 'com.google.mlkit:face-detection:16.1.5'
+  implementation 'com.google.mlkit:segmentation-selfie:16.0.0-beta4'
+
+  implementation project(":SDK")
 
   implementation "androidx.lifecycle:lifecycle-extensions:$LIFECYCLE_VERSION"
   implementation "com.google.dagger:dagger:$DAGGER_VERSION"

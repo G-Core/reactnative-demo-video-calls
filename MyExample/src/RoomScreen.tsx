@@ -1,18 +1,19 @@
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React, {useEffect, useState} from 'react';
 
-import {Dimensions, NativeModules, Platform, Pressable, StyleSheet, View,} from 'react-native';
+import {Dimensions, NativeModules, Platform, Pressable, StyleSheet, View} from 'react-native';
 
 import {withAnchorPoint} from 'react-native-anchor-point';
 import GCRemoteView from './GCRemoteView';
 import GCLocalView from './GCLocalView';
 
-import {BlurIcon, CameraIcon, DropIcon, MicrophoneIcon, SwitchCameraIcon,} from './Icons';
+import {BlurIcon, CameraIcon, DropIcon, MicrophoneIcon, SwitchCameraIcon} from './Icons';
 import type {RootStackParamList} from './types';
 import {getCameraPermission, getMicPermission} from './helpers';
 
 const screen = Dimensions.get('screen');
 const aspectRatio = 4 / 3;
+// const height = screen.height > screen.width ? screen.height - 80 : screen.width - 80;
 const height = screen.height - 80;
 const width = height * aspectRatio; // * screen.scale;
 

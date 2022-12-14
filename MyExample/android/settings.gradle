@@ -13,8 +13,8 @@ include ':app'
 
 includeBuild('../node_modules/react-native-gradle-plugin')
 
-include ':GCoreVideoCallsSDK'
-project(':GCoreVideoCallsSDK').projectDir = new File(rootProject.projectDir, '../../android/GCoreVideoCallsSDK')
+include ':SDK'
+project(':SDK').projectDir = new File(rootProject.projectDir, '../../android/GCoreVideoCallsSDK')
 
 include ':reactnativeawesomemodule'
 project(':reactnativeawesomemodule').projectDir = new File(rootProject.projectDir, '../../android')

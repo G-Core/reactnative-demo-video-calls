@@ -4,7 +4,8 @@ pluginManagement {
     google()
   }
 }
+
 rootProject.name = "GCAndroidNativeModule"
 
-include ':GCoreVideoCallsSDK'
-project(':GCoreVideoCallsSDK').projectDir = new File(rootProject.projectDir, '/GCoreVideoCallsSDK')
+include ':SDK'
+project(':SDK').projectDir = new File(rootDir, 'GCoreVideoCallsSDK/')
