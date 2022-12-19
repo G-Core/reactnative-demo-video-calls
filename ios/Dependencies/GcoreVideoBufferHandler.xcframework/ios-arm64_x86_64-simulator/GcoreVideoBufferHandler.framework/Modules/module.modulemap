@@ -1,0 +1,11 @@
+framework module GcoreVideoBufferHandler {
+  umbrella header "GcoreVideoBufferHandler.h"
+
+  export *
+  module * { export * }
+}
+
+module GcoreVideoBufferHandler.Swift {
+  header "GcoreVideoBufferHandler-Swift.h"
+  requires objc
+}

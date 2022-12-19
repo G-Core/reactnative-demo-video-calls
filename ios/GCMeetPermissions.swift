@@ -1,4 +1,5 @@
 import Foundation
+import AVFoundation
 
 @objc(GCMeetPermissions)
 class GCMeetPermissions: NSObject {

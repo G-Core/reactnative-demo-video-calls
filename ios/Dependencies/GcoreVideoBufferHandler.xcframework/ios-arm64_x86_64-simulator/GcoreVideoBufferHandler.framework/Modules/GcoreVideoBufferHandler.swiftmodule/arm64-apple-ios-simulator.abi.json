@@ -1,0 +1,737 @@
+{
+  "ABIRoot": {
+    "kind": "Root",
+    "name": "TopLevel",
+    "printedName": "TopLevel",
+    "children": [
+      {
+        "kind": "Import",
+        "name": "UIKit",
+        "printedName": "UIKit",
+        "declKind": "Import",
+        "moduleName": "GcoreVideoBufferHandler"
+      },
+      {
+        "kind": "Import",
+        "name": "Vision",
+        "printedName": "Vision",
+        "declKind": "Import",
+        "moduleName": "GcoreVideoBufferHandler"
+      },
+      {
+        "kind": "Import",
+        "name": "UIKit",
+        "printedName": "UIKit",
+        "declKind": "Import",
+        "moduleName": "GcoreVideoBufferHandler"
+      },
+      {
+        "kind": "Import",
+        "name": "Foundation",
+        "printedName": "Foundation",
+        "declKind": "Import",
+        "moduleName": "GcoreVideoBufferHandler"
+      },
+      {
+        "kind": "Import",
+        "name": "AVFoundation",
+        "printedName": "AVFoundation",
+        "declKind": "Import",
+        "moduleName": "GcoreVideoBufferHandler"
+      },
+      {
+        "kind": "Import",
+        "name": "Foundation",
+        "printedName": "Foundation",
+        "declKind": "Import",
+        "moduleName": "GcoreVideoBufferHandler"
+      },
+      {
+        "kind": "Import",
+        "name": "AVFoundation",
+        "printedName": "AVFoundation",
+        "declKind": "Import",
+        "moduleName": "GcoreVideoBufferHandler"
+      },
+      {
+        "kind": "Import",
+        "name": "UIKit",
+        "printedName": "UIKit",
+        "declKind": "Import",
+        "moduleName": "GcoreVideoBufferHandler"
+      },
+      {
+        "kind": "Import",
+        "name": "UIKit",
+        "printedName": "UIKit",
+        "declKind": "Import",
+        "moduleName": "GcoreVideoBufferHandler"
+      },
+      {
+        "kind": "Import",
+        "name": "AVFoundation",
+        "printedName": "AVFoundation",
+        "declKind": "Import",
+        "moduleName": "GcoreVideoBufferHandler"
+      },
+      {
+        "kind": "Import",
+        "name": "UIKit",
+        "printedName": "UIKit",
+        "declKind": "Import",
+        "moduleName": "GcoreVideoBufferHandler"
+      },
+      {
+        "kind": "TypeDecl",
+        "name": "GcoreVideoBufferHandlerMode",
+        "printedName": "GcoreVideoBufferHandlerMode",
+        "children": [
+          {
+            "kind": "Var",
+            "name": "normal",
+            "printedName": "normal",
+            "children": [
+              {
+                "kind": "TypeFunc",
+                "name": "Function",
+                "printedName": "(GcoreVideoBufferHandler.GcoreVideoBufferHandlerMode.Type) -> GcoreVideoBufferHandler.GcoreVideoBufferHandlerMode",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "GcoreVideoBufferHandlerMode",
+                    "printedName": "GcoreVideoBufferHandler.GcoreVideoBufferHandlerMode",
+                    "usr": "s:23GcoreVideoBufferHandler0abcD4ModeO"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Metatype",
+                    "printedName": "GcoreVideoBufferHandler.GcoreVideoBufferHandlerMode.Type",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "GcoreVideoBufferHandlerMode",
+                        "printedName": "GcoreVideoBufferHandler.GcoreVideoBufferHandlerMode",
+                        "usr": "s:23GcoreVideoBufferHandler0abcD4ModeO"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "declKind": "EnumElement",
+            "usr": "s:23GcoreVideoBufferHandler0abcD4ModeO6normalyA2CmF",
+            "mangledName": "$s23GcoreVideoBufferHandler0abcD4ModeO6normalyA2CmF",
+            "moduleName": "GcoreVideoBufferHandler"
+          },
+          {
+            "kind": "Var",
+            "name": "blur",
+            "printedName": "blur",
+            "children": [
+              {
+                "kind": "TypeFunc",
+                "name": "Function",
+                "printedName": "(GcoreVideoBufferHandler.GcoreVideoBufferHandlerMode.Type) -> GcoreVideoBufferHandler.GcoreVideoBufferHandlerMode",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "GcoreVideoBufferHandlerMode",
+                    "printedName": "GcoreVideoBufferHandler.GcoreVideoBufferHandlerMode",
+                    "usr": "s:23GcoreVideoBufferHandler0abcD4ModeO"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Metatype",
+                    "printedName": "GcoreVideoBufferHandler.GcoreVideoBufferHandlerMode.Type",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "GcoreVideoBufferHandlerMode",
+                        "printedName": "GcoreVideoBufferHandler.GcoreVideoBufferHandlerMode",
+                        "usr": "s:23GcoreVideoBufferHandler0abcD4ModeO"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "declKind": "EnumElement",
+            "usr": "s:23GcoreVideoBufferHandler0abcD4ModeO4bluryA2CmF",
+            "mangledName": "$s23GcoreVideoBufferHandler0abcD4ModeO4bluryA2CmF",
+            "moduleName": "GcoreVideoBufferHandler"
+          },
+          {
+            "kind": "Var",
+            "name": "detectFaceAndBlur",
+            "printedName": "detectFaceAndBlur",
+            "children": [
+              {
+                "kind": "TypeFunc",
+                "name": "Function",
+                "printedName": "(GcoreVideoBufferHandler.GcoreVideoBufferHandlerMode.Type) -> GcoreVideoBufferHandler.GcoreVideoBufferHandlerMode",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "GcoreVideoBufferHandlerMode",
+                    "printedName": "GcoreVideoBufferHandler.GcoreVideoBufferHandlerMode",
+                    "usr": "s:23GcoreVideoBufferHandler0abcD4ModeO"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Metatype",
+                    "printedName": "GcoreVideoBufferHandler.GcoreVideoBufferHandlerMode.Type",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "GcoreVideoBufferHandlerMode",
+                        "printedName": "GcoreVideoBufferHandler.GcoreVideoBufferHandlerMode",
+                        "usr": "s:23GcoreVideoBufferHandler0abcD4ModeO"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "declKind": "EnumElement",
+            "usr": "s:23GcoreVideoBufferHandler0abcD4ModeO17detectFaceAndBluryA2CmF",
+            "mangledName": "$s23GcoreVideoBufferHandler0abcD4ModeO17detectFaceAndBluryA2CmF",
+            "moduleName": "GcoreVideoBufferHandler"
+          },
+          {
+            "kind": "Var",
+            "name": "blurBackground",
+            "printedName": "blurBackground",
+            "children": [
+              {
+                "kind": "TypeFunc",
+                "name": "Function",
+                "printedName": "(GcoreVideoBufferHandler.GcoreVideoBufferHandlerMode.Type) -> GcoreVideoBufferHandler.GcoreVideoBufferHandlerMode",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "GcoreVideoBufferHandlerMode",
+                    "printedName": "GcoreVideoBufferHandler.GcoreVideoBufferHandlerMode",
+                    "usr": "s:23GcoreVideoBufferHandler0abcD4ModeO"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Metatype",
+                    "printedName": "GcoreVideoBufferHandler.GcoreVideoBufferHandlerMode.Type",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "GcoreVideoBufferHandlerMode",
+                        "printedName": "GcoreVideoBufferHandler.GcoreVideoBufferHandlerMode",
+                        "usr": "s:23GcoreVideoBufferHandler0abcD4ModeO"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "declKind": "EnumElement",
+            "usr": "s:23GcoreVideoBufferHandler0abcD4ModeO14blurBackgroundyA2CmF",
+            "mangledName": "$s23GcoreVideoBufferHandler0abcD4ModeO14blurBackgroundyA2CmF",
+            "moduleName": "GcoreVideoBufferHandler",
+            "intro_iOS": "15",
+            "declAttributes": [
+              "Available"
+            ]
+          },
+          {
+            "kind": "Var",
+            "name": "backgroundWithImage",
+            "printedName": "backgroundWithImage",
+            "children": [
+              {
+                "kind": "TypeFunc",
+                "name": "Function",
+                "printedName": "(GcoreVideoBufferHandler.GcoreVideoBufferHandlerMode.Type) -> GcoreVideoBufferHandler.GcoreVideoBufferHandlerMode",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "GcoreVideoBufferHandlerMode",
+                    "printedName": "GcoreVideoBufferHandler.GcoreVideoBufferHandlerMode",
+                    "usr": "s:23GcoreVideoBufferHandler0abcD4ModeO"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Metatype",
+                    "printedName": "GcoreVideoBufferHandler.GcoreVideoBufferHandlerMode.Type",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "GcoreVideoBufferHandlerMode",
+                        "printedName": "GcoreVideoBufferHandler.GcoreVideoBufferHandlerMode",
+                        "usr": "s:23GcoreVideoBufferHandler0abcD4ModeO"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "declKind": "EnumElement",
+            "usr": "s:23GcoreVideoBufferHandler0abcD4ModeO19backgroundWithImageyA2CmF",
+            "mangledName": "$s23GcoreVideoBufferHandler0abcD4ModeO19backgroundWithImageyA2CmF",
+            "moduleName": "GcoreVideoBufferHandler",
+            "intro_iOS": "15",
+            "declAttributes": [
+              "Available"
+            ]
+          },
+          {
+            "kind": "Function",
+            "name": "==",
+            "printedName": "==(_:_:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Bool",
+                "printedName": "Swift.Bool",
+                "usr": "s:Sb"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "GcoreVideoBufferHandlerMode",
+                "printedName": "GcoreVideoBufferHandler.GcoreVideoBufferHandlerMode",
+                "usr": "s:23GcoreVideoBufferHandler0abcD4ModeO"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "GcoreVideoBufferHandlerMode",
+                "printedName": "GcoreVideoBufferHandler.GcoreVideoBufferHandlerMode",
+                "usr": "s:23GcoreVideoBufferHandler0abcD4ModeO"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:23GcoreVideoBufferHandler0abcD4ModeO2eeoiySbAC_ACtFZ",
+            "mangledName": "$s23GcoreVideoBufferHandler0abcD4ModeO2eeoiySbAC_ACtFZ",
+            "moduleName": "GcoreVideoBufferHandler",
+            "static": true,
+            "implicit": true,
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Var",
+            "name": "hashValue",
+            "printedName": "hashValue",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Int",
+                "printedName": "Swift.Int",
+                "usr": "s:Si"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:23GcoreVideoBufferHandler0abcD4ModeO9hashValueSivp",
+            "mangledName": "$s23GcoreVideoBufferHandler0abcD4ModeO9hashValueSivp",
+            "moduleName": "GcoreVideoBufferHandler",
+            "implicit": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Int",
+                    "printedName": "Swift.Int",
+                    "usr": "s:Si"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:23GcoreVideoBufferHandler0abcD4ModeO9hashValueSivg",
+                "mangledName": "$s23GcoreVideoBufferHandler0abcD4ModeO9hashValueSivg",
+                "moduleName": "GcoreVideoBufferHandler",
+                "implicit": true,
+                "accessorKind": "get"
+              }
+            ]
+          },
+          {
+            "kind": "Function",
+            "name": "hash",
+            "printedName": "hash(into:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Void",
+                "printedName": "()"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Hasher",
+                "printedName": "Swift.Hasher",
+                "paramValueOwnership": "InOut",
+                "usr": "s:s6HasherV"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:23GcoreVideoBufferHandler0abcD4ModeO4hash4intoys6HasherVz_tF",
+            "mangledName": "$s23GcoreVideoBufferHandler0abcD4ModeO4hash4intoys6HasherVz_tF",
+            "moduleName": "GcoreVideoBufferHandler",
+            "implicit": true,
+            "funcSelfKind": "NonMutating"
+          }
+        ],
+        "declKind": "Enum",
+        "usr": "s:23GcoreVideoBufferHandler0abcD4ModeO",
+        "mangledName": "$s23GcoreVideoBufferHandler0abcD4ModeO",
+        "moduleName": "GcoreVideoBufferHandler",
+        "declAttributes": [
+          "AccessControl"
+        ],
+        "conformances": [
+          {
+            "kind": "Conformance",
+            "name": "Equatable",
+            "printedName": "Equatable",
+            "usr": "s:SQ",
+            "mangledName": "$sSQ"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Hashable",
+            "printedName": "Hashable",
+            "usr": "s:SH",
+            "mangledName": "$sSH"
+          }
+        ]
+      },
+      {
+        "kind": "Import",
+        "name": "UIKit",
+        "printedName": "UIKit",
+        "declKind": "Import",
+        "moduleName": "GcoreVideoBufferHandler"
+      },
+      {
+        "kind": "Import",
+        "name": "AVFoundation",
+        "printedName": "AVFoundation",
+        "declKind": "Import",
+        "moduleName": "GcoreVideoBufferHandler"
+      },
+      {
+        "kind": "Import",
+        "name": "VideoToolbox",
+        "printedName": "VideoToolbox",
+        "declKind": "Import",
+        "moduleName": "GcoreVideoBufferHandler"
+      },
+      {
+        "kind": "TypeDecl",
+        "name": "GcoreBufferHandler",
+        "printedName": "GcoreBufferHandler",
+        "children": [
+          {
+            "kind": "Var",
+            "name": "mode",
+            "printedName": "mode",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "GcoreVideoBufferHandlerMode",
+                "printedName": "GcoreVideoBufferHandler.GcoreVideoBufferHandlerMode",
+                "usr": "s:23GcoreVideoBufferHandler0abcD4ModeO"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:23GcoreVideoBufferHandler0acD0C4modeAA0abcD4ModeOvp",
+            "mangledName": "$s23GcoreVideoBufferHandler0acD0C4modeAA0abcD4ModeOvp",
+            "moduleName": "GcoreVideoBufferHandler",
+            "declAttributes": [
+              "HasInitialValue",
+              "Final",
+              "HasStorage",
+              "AccessControl",
+              "RawDocComment"
+            ],
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "GcoreVideoBufferHandlerMode",
+                    "printedName": "GcoreVideoBufferHandler.GcoreVideoBufferHandlerMode",
+                    "usr": "s:23GcoreVideoBufferHandler0abcD4ModeO"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:23GcoreVideoBufferHandler0acD0C4modeAA0abcD4ModeOvg",
+                "mangledName": "$s23GcoreVideoBufferHandler0acD0C4modeAA0abcD4ModeOvg",
+                "moduleName": "GcoreVideoBufferHandler",
+                "implicit": true,
+                "declAttributes": [
+                  "Final"
+                ],
+                "accessorKind": "get"
+              },
+              {
+                "kind": "Accessor",
+                "name": "Set",
+                "printedName": "Set()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "GcoreVideoBufferHandlerMode",
+                    "printedName": "GcoreVideoBufferHandler.GcoreVideoBufferHandlerMode",
+                    "usr": "s:23GcoreVideoBufferHandler0abcD4ModeO"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:23GcoreVideoBufferHandler0acD0C4modeAA0abcD4ModeOvs",
+                "mangledName": "$s23GcoreVideoBufferHandler0acD0C4modeAA0abcD4ModeOvs",
+                "moduleName": "GcoreVideoBufferHandler",
+                "implicit": true,
+                "declAttributes": [
+                  "Final"
+                ],
+                "accessorKind": "set"
+              },
+              {
+                "kind": "Accessor",
+                "name": "Modify",
+                "printedName": "Modify()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:23GcoreVideoBufferHandler0acD0C4modeAA0abcD4ModeOvM",
+                "mangledName": "$s23GcoreVideoBufferHandler0acD0C4modeAA0abcD4ModeOvM",
+                "moduleName": "GcoreVideoBufferHandler",
+                "implicit": true,
+                "declAttributes": [
+                  "Final"
+                ],
+                "accessorKind": "_modify"
+              }
+            ]
+          },
+          {
+            "kind": "Constructor",
+            "name": "init",
+            "printedName": "init()",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "GcoreBufferHandler",
+                "printedName": "GcoreVideoBufferHandler.GcoreBufferHandler",
+                "usr": "s:23GcoreVideoBufferHandler0acD0C"
+              }
+            ],
+            "declKind": "Constructor",
+            "usr": "s:23GcoreVideoBufferHandler0acD0CACycfc",
+            "mangledName": "$s23GcoreVideoBufferHandler0acD0CACycfc",
+            "moduleName": "GcoreVideoBufferHandler",
+            "declAttributes": [
+              "AccessControl",
+              "RawDocComment"
+            ],
+            "init_kind": "Designated"
+          },
+          {
+            "kind": "Function",
+            "name": "setBackgroundImage",
+            "printedName": "setBackgroundImage(_:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Void",
+                "printedName": "()"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Optional",
+                "printedName": "UIKit.UIImage?",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "UIImage",
+                    "printedName": "UIKit.UIImage",
+                    "usr": "c:objc(cs)UIImage"
+                  }
+                ],
+                "usr": "s:Sq"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:23GcoreVideoBufferHandler0acD0C18setBackgroundImageyySo7UIImageCSgF",
+            "mangledName": "$s23GcoreVideoBufferHandler0acD0C18setBackgroundImageyySo7UIImageCSgF",
+            "moduleName": "GcoreVideoBufferHandler",
+            "declAttributes": [
+              "Final",
+              "AccessControl",
+              "RawDocComment"
+            ],
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Function",
+            "name": "setBlurRadius",
+            "printedName": "setBlurRadius(_:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Void",
+                "printedName": "()"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Double",
+                "printedName": "Swift.Double",
+                "usr": "s:Sd"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:23GcoreVideoBufferHandler0acD0C13setBlurRadiusyySdF",
+            "mangledName": "$s23GcoreVideoBufferHandler0acD0C13setBlurRadiusyySdF",
+            "moduleName": "GcoreVideoBufferHandler",
+            "declAttributes": [
+              "Final",
+              "AccessControl"
+            ],
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Function",
+            "name": "proccessBuffer",
+            "printedName": "proccessBuffer(_:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Void",
+                "printedName": "()"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "CVBuffer",
+                "printedName": "CoreVideo.CVBuffer",
+                "usr": "c:@T@CVBufferRef"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:23GcoreVideoBufferHandler0acD0C08proccessC0yySo11CVBufferRefaF",
+            "mangledName": "$s23GcoreVideoBufferHandler0acD0C08proccessC0yySo11CVBufferRefaF",
+            "moduleName": "GcoreVideoBufferHandler",
+            "declAttributes": [
+              "Final",
+              "AccessControl"
+            ],
+            "funcSelfKind": "NonMutating"
+          }
+        ],
+        "declKind": "Class",
+        "usr": "s:23GcoreVideoBufferHandler0acD0C",
+        "mangledName": "$s23GcoreVideoBufferHandler0acD0C",
+        "moduleName": "GcoreVideoBufferHandler",
+        "declAttributes": [
+          "Final",
+          "AccessControl"
+        ]
+      },
+      {
+        "kind": "Import",
+        "name": "AVFoundation",
+        "printedName": "AVFoundation",
+        "declKind": "Import",
+        "moduleName": "GcoreVideoBufferHandler"
+      },
+      {
+        "kind": "Import",
+        "name": "Foundation",
+        "printedName": "Foundation",
+        "declKind": "Import",
+        "moduleName": "GcoreVideoBufferHandler"
+      },
+      {
+        "kind": "Import",
+        "name": "AVFoundation",
+        "printedName": "AVFoundation",
+        "declKind": "Import",
+        "moduleName": "GcoreVideoBufferHandler"
+      },
+      {
+        "kind": "Import",
+        "name": "CoreImage",
+        "printedName": "CoreImage",
+        "declKind": "Import",
+        "moduleName": "GcoreVideoBufferHandler"
+      }
+    ],
+    "json_format_version": 8
+  },
+  "ConstValues": [
+    {
+      "filePath": "\/Users\/evgenijpolubin\/xcode\/GCore\/BitBucket\/GcoreVideoBufferHandler\/GcoreVideoBufferHandler\/MaskDetector\/VisionWrapper.swift",
+      "kind": "BooleanLiteral",
+      "offset": 149,
+      "length": 5,
+      "value": "false"
+    },
+    {
+      "filePath": "\/Users\/evgenijpolubin\/xcode\/GCore\/BitBucket\/GcoreVideoBufferHandler\/GcoreVideoBufferHandler\/MaskDetector\/VisionWrapper.swift",
+      "kind": "StringLiteral",
+      "offset": 252,
+      "length": 19,
+      "value": "\"Face Detect Queue\""
+    },
+    {
+      "filePath": "\/Users\/evgenijpolubin\/xcode\/GCore\/BitBucket\/GcoreVideoBufferHandler\/GcoreVideoBufferHandler\/FilterService\/FilterService.swift",
+      "kind": "IntegerLiteral",
+      "offset": 135,
+      "length": 2,
+      "value": "10"
+    },
+    {
+      "filePath": "\/Users\/evgenijpolubin\/xcode\/GCore\/BitBucket\/GcoreVideoBufferHandler\/GcoreVideoBufferHandler\/FilterService\/FilterService.swift",
+      "kind": "BooleanLiteral",
+      "offset": 224,
+      "length": 5,
+      "value": "false"
+    },
+    {
+      "filePath": "\/Users\/evgenijpolubin\/xcode\/GCore\/BitBucket\/GcoreVideoBufferHandler\/GcoreVideoBufferHandler\/GcoreVideoBufferHandler.swift",
+      "kind": "BooleanLiteral",
+      "offset": 364,
+      "length": 5,
+      "value": "false"
+    },
+    {
+      "filePath": "\/Users\/evgenijpolubin\/xcode\/GCore\/BitBucket\/GcoreVideoBufferHandler\/GcoreVideoBufferHandler\/GcoreVideoBufferHandler.swift",
+      "kind": "IntegerLiteral",
+      "offset": 407,
+      "length": 1,
+      "value": "0"
+    },
+    {
+      "filePath": "\/Users\/evgenijpolubin\/xcode\/GCore\/BitBucket\/GcoreVideoBufferHandler\/GcoreVideoBufferHandler\/GcoreVideoBufferHandler.swift",
+      "kind": "IntegerLiteral",
+      "offset": 448,
+      "length": 2,
+      "value": "10"
+    },
+    {
+      "filePath": "\/Users\/evgenijpolubin\/xcode\/GCore\/BitBucket\/GcoreVideoBufferHandler\/GcoreVideoBufferHandler\/GcoreVideoBufferHandler.swift",
+      "kind": "StringLiteral",
+      "offset": 634,
+      "length": 28,
+      "value": "\"cannot create metal device\""
+    }
+  ]
+}

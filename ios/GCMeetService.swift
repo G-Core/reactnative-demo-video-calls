@@ -2,6 +2,7 @@ import Foundation
 import GCoreVideoCallsSDK
 import WebRTC
 import React
+import GcoreVideoBufferHandler
 
 struct ConnectionOptions {
     var isVideoOn = false
@@ -16,13 +17,14 @@ struct ConnectionOptions {
 @objc(GCMeetService)
 class GCMeetService: RCTEventEmitter {
 
+    private let bufferHandler = GcoreBufferHandler()
     private var client = GCoreMeet.shared
     private var joinOptions: ConnectionOptions!
 
     override func supportedEvents() -> [String]! {
         return ["onConnectionChanged"]
     }
-    
+
     @objc
     func openConnection(_ options: NSDictionary) {
         GCoreRoomLogger.activateLogger()
@@ -45,8 +47,8 @@ class GCMeetService: RCTEventEmitter {
             role: userRole)
 
         let roomParams = GCoreRoomParams(
-            id: options["roomId"] as! String,
-            host: options["clientHostName"] as? String)
+            id: options["roomId"] as! String)
+           // host: options["clientHostName"] as? String)
 
         client.connectionParams = (localUserParams, roomParams)
 
@@ -59,19 +61,23 @@ class GCMeetService: RCTEventEmitter {
         try? client.startConnection()
         client.audioSessionActivate()
         client.roomListener = self
-    }
 
-    @objc
-    func enableBlur() {
+        bufferHandler.setBlurRadius(joinOptions.blurSigma)
+        bufferHandler.mode = .detectFaceAndBlur
         client.webrtcBufferDelegate = self
-        print("blur on")
     }
 
-    @objc
-    func disableBlur() {
-        client.webrtcBufferDelegate = nil
-        print("blur off")
-    }
+//     @objc
+//     func enableBlur() {
+//         client.webrtcBufferDelegate = self
+//         print("blur on")
+//     }
+//
+//     @objc
+//     func disableBlur() {
+//         client.webrtcBufferDelegate = nil
+//         print("blur off")
+//     }
 
     @objc
     func closeConnection() {
@@ -132,11 +138,9 @@ class GCMeetService: RCTEventEmitter {
 }
 
 extension GCMeetService: MediaCapturerBufferDelegate {
-  func mediaCapturerDidBuffer(_ pixelBuffer: CVPixelBuffer) {
-      let ciimage = CIImage(cvPixelBuffer: pixelBuffer).applyingGaussianBlur(sigma: self.joinOptions.blurSigma)
-      CIContext().render(ciimage, to: pixelBuffer)
-      print("blured with sigma: ", self.joinOptions.blurSigma)
-  }
+ func mediaCapturerDidBuffer(_ pixelBuffer: CVPixelBuffer) {
+   bufferHandler.proccessBuffer(pixelBuffer)
+ }
 }
 
 
@@ -146,12 +150,21 @@ extension GCMeetService: GCoreRoomListener {
     }
 
     func roomClient(_ client: GCoreRoomClient, captureSession: AVCaptureSession, captureDevice: AVCaptureDevice) {
-
+        guard let videoOutput = captureSession.outputs.first(where: { $0 is AVCaptureVideoDataOutput }) as? AVCaptureVideoDataOutput else {
+          return
+        }
+        videoOutput.alwaysDiscardsLateVideoFrames = true
     }
 
     func roomClientHandle(error: GCoreRoomError) {
-
-    }
+        if case .fatalError(let error) = error {
+          switch error {
+          case HTTPUpgradeError.notAnUpgrade(502):
+            try? client.startConnection()
+          default: break
+          }
+        }
+      }
 
     func roomClientHandle(_ client: GCoreRoomClient, forAllRoles joinData: GCoreJoinData) {
         switch joinData {
@@ -228,7 +241,7 @@ extension GCMeetService: GCoreRoomListener {
     }
 
     func roomClientHandle(_ client: GCoreRoomClient, connectionEvent: GCoreRoomConnectionEvent) {
-        
+
         sendEvent(withName: "onConnectionChanged", body: ["connection": String(describing: connectionEvent)])
         switch connectionEvent {
 

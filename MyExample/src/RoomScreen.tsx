@@ -1,13 +1,13 @@
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React, {useEffect, useState} from 'react';
 
-import {Dimensions, NativeModules, Platform, Pressable, StyleSheet, View} from 'react-native';
+import {Dimensions, NativeModules, Pressable, StyleSheet, View} from 'react-native';
 
 import {withAnchorPoint} from 'react-native-anchor-point';
 import GCRemoteView from './GCRemoteView';
 import GCLocalView from './GCLocalView';
 
-import {BlurIcon, CameraIcon, DropIcon, MicrophoneIcon, SwitchCameraIcon} from './Icons';
+import {CameraIcon, DropIcon, MicrophoneIcon, SwitchCameraIcon} from './Icons';
 import type {RootStackParamList} from './types';
 import {getCameraPermission, getMicPermission} from './helpers';
 
@@ -27,7 +27,6 @@ const getTransform = () => {
 export const RoomScreen = ({ route, navigation }: NativeStackScreenProps<RootStackParamList, 'Room'>) => {
   const [isVideoOn, onChangeVideo] = useState(route.params.isVideoOn);
   const [isAudioOn, onChangeAudio] = useState(route.params.isAudioOn);
-  const [isBlurOn, onChangeBlur] = useState(false);
 
   useEffect(() => {
     return () => {
@@ -38,18 +37,6 @@ export const RoomScreen = ({ route, navigation }: NativeStackScreenProps<RootSta
   const disconnect = () => {
     NativeModules.GCMeetService.closeConnection();
     navigation.navigate('Home');
-  };
-
-  const toggleBlur = () => {
-    if (Platform.OS === 'ios') {
-      const newValue = !isBlurOn;
-      if (newValue) {
-        NativeModules.GCMeetService.enableBlur();
-      } else {
-        NativeModules.GCMeetService.disableBlur();
-      }
-      onChangeBlur(newValue);
-    }
   };
 
   const toggleVideo = async () => {
@@ -94,13 +81,6 @@ export const RoomScreen = ({ route, navigation }: NativeStackScreenProps<RootSta
             <Pressable style={[styles.btn]} onPress={switchCamera}>
               <SwitchCameraIcon/>
             </Pressable>
-            {Platform.OS === 'ios' && (
-              <Pressable
-                style={[styles.btn, isBlurOn ? styles.on : styles.off]}
-                onPress={toggleBlur}>
-                <BlurIcon/>
-              </Pressable>
-            )}
             <Pressable
               style={[styles.btn, isVideoOn ? styles.on : styles.off]}
               onPress={toggleVideo}>
